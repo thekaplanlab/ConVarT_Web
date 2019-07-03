@@ -1,15 +1,3 @@
-<?php
-require_once('functions.php');
-	if(isset($_REQUEST['err'])) {
-		$err = $_REQUEST['err'];
-		if($err=="no_result") {
-			echo '<script>Materialize.toast("In our database, there is no record for this gene.", 5500, "rounded")</script>';
-		}
-		if($err=="page_error") {
-                        echo '<script>Materialize.toast("You used incorrect adress or link. You are redirected to home page.", 5500, "rounded")</script>';
-                }
-	} else {$err="";}
-?>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,6 +14,7 @@ require_once('functions.php');
     <link type="text/css" rel="stylesheet" href="files/css/CurrentProject.css?id=v3"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
 </head>
 <body id="CurrentProjectHomePage">
     
@@ -134,11 +123,11 @@ require_once('functions.php');
         </div>
         <p class="center-align"><b>OR</b></p><br>
         <div class="row">
-        	<form action="<?= $GLOBALS['base_url']; ?>blast_query.php" method="post" name="seqSearch" autocomplete="off">
+        	<form action="blast_query.php" method="post" name="seqSearch" autocomplete="off">
 			    <div class="col l12 m12 s12"><center>
 			    <textarea id="sequenceArea" name="sequence" class="materialize-textarea sequenceArea" 
-			    placeholder=">NP_592921.1 putative AP-2 adaptor complex subunit Apm4 [S. pombe]&#x0a;MISGLFIFNLKGDTLICKTFRHDLKKSVTEIFRVAILTNTDYRHPIVSIGSSTYIYTKHEDLYVVAITKGNPNVMIVLEFLESLIQDLTHYFGKLNENTVKDNVSFIFELLDEMIDYGIIQTTEPDALARSVSITAVKKKGNALSLKRSHSSQLAHTTSSEIPGSVPWRRAGIKYRKNSIYIDIVERMNLLISSTGNVLRSDVSGVVKMRAMLSGMPECQFGLNDKLDFKLKQSESKSKSNNSRNPSSVNGGFVILEDCQFHQCVRLPEFENEHRITFIPPDGEVELMSYRSHENINIPFRIVPIVEQLSKQKIIYRISIRADYPHKLSSSLNFRIPVPTNVVKANPRVNRGKAGYEPSENIINWKIPRFLGETELIFYAEVELSNTTNQQIWAKPPISLDFNILMFTSSGLHVQYLRVSEPSNSKYKSIKWVRYSTRAGTCEIRI"></textarea>
-			    <!-- <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div> -->
+			    placeholder=">NP_592921.1 putative AP-2 adaptor complex subunit Apm4 [S. pombe]&#x0a;MISGLFIFNLKGDTLICKTFRHDLKKSVTEIFRVAILTNTDYRHPIVSIGSSTYIYTKHEDLYVVAITKGNPNVMIVLEFLESLIQDLTHYFGKLNENTVKDNVSFIFELLDEMIDYGIIQTTEPDALARSVSITAVKKKGNALSLKRSHSSQLAHTTSSEIPGSVPWRRAGIKYRKNSIYIDIVERMNLLISSTGNVLRSDVSGVVKMRAMLSGMPECQFGLNDKLDFKLKQSESKSKSNNSRNPSSVNGGFVILEDCQFHQCVRLPEFENEHRITFIPPDGEVELMSYRSHENINIPFRIVPIVEQLSKQKIIYRISIRADYPHKLSSSLNFRIPVPTNVVKANPRVNRGKAGYEPSENIINWKIPRFLGETELIFYAEVELSNTTNQQIWAKPPISLDFNILMFTSSGLHVQYLRVSEPSNSKYKSIKWVRYSTRAGTCEIRI" required></textarea>
+			    <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div> <!-- -->
 			   <div class="row"><button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button></center></div>
 			</form>
         	<center><a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="Here is ConVarT (Conserved clinical Variation visualization Tool)! Check it out on " 
@@ -238,6 +227,22 @@ require_once('functions.php');
 
 		return t;
 		}(document, "script", "twitter-wjs"));
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			url = window.location.href;
+			key = url.split("?err=")[1]
+			if (key == "page_error") {
+				Materialize.toast("You used incorrect adress or link. You are redirected to home page.", 5500, "rounded");
+			}
+			if (key == "verify_robot") {
+				Materialize.toast("Please verify you are not robot!", 5500, "rounded");
+			}
+			if (key == "maintenance") {
+				window.location.href = "http://convart.org/503.html";
+			}
+		});
 	</script>
 
 </body>
