@@ -280,12 +280,21 @@ header("Cache-Control: max-age=$seconds_to_cache");
           var SpecieName = document.createElement("div");
           var SpecieNameLink = document.createElement("a");
           var prType = prName.substring(0, 2);
+          console.log('hey', prType);
           if (prType == "NP" || prType == "XP" ) {
           	SpecieNameLink.setAttribute("href", "https://www.ncbi.nlm.nih.gov/protein/" + prID);
           }
           if (prType == "EN") {
           	SpecieNameLink.setAttribute("href", "https://www.ensembl.org/id/" + prID);
           }
+
+          regexPattern = "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
+          if (prName.search(regexPattern) != "-1") {
+		  	prID = prName.split(" ")[1];
+		  	SpecieNameLink.setAttribute("href", "https://www.uniprot.org/uniprot/" + prID);
+		  	species_by_word = prName.split("=")[1].split(" ");
+		  	species = species_by_word[0][0]+". " + species_by_word[1];
+		  }
 
           SpecieNameLink.setAttribute('target', '_blank');
           SpecieNameLink.setAttribute('class','tooltipped');
