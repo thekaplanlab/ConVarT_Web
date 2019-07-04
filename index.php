@@ -51,7 +51,7 @@ require_once('functions.php');
 
     <div class="navbar-fixed"><nav>
         <div class="nav-wrapper sitemenu">
-            <a href="index.php" class="brand-logo sitelogo"><img src="files/img/convart.png" class="sitelogoimg"></a>
+            <a href="http://convart.org" class="brand-logo sitelogo"><img src="files/img/convart.png" class="sitelogoimg"></a>
             <a href="#" data-activates="mobile-demo" class="button-collapse white-text"><i class="mobilbuton material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down menulinks">
                 <li><a href="index.php">Home</a></li>
