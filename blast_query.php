@@ -1,24 +1,24 @@
 <?php
 require_once('config.php');
 require_once('functions.php');
-/*
-MAKALE ICIN OKTAY HOCA KAPATTIRDI 
+/* 
 
 if (isset($_POST['g-recaptcha-response'])) {
     $captcha = $_POST['g-recaptcha-response'];
 }
 if (!$captcha) {
-    echo '<h2>Please verify you are not robot!</h2>';
-    exit;
+    //echo '<h2>Please verify you are not robot!</h2>';
+    header("Location: index.php?err=verify_robot"); 
+    exit();
 }
 
 $check_point = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LdZMaMUAAAAAG9OsWBShn5P1ykVd1f3EAIYbWt4&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']));
 
 if ($check_point->success == false) {
-    echo '<h2>Spam!!!!!</h2>';
-    //exit;
-}
-*/
+    //echo '<h2>Spam!!!!!</h2>';
+    header("Location: index.php?err=verify_robot");
+    exit;
+}*/
 
 if (! isset($_REQUEST['sequence'])){
     exit;
@@ -29,8 +29,9 @@ file_put_contents($randomFilename, $_REQUEST['sequence']);
 $result = shell_exec("blastp -query $randomFilename -db '/opt/current_project/db/blast_db/convartProteome' -outfmt 6 -num_threads 1");
 $result = explode("\n", $result);
 $id = explode("\t", $result[0])[1];
+
 $humanGeneDetails = getGeneDetailsById($id, true);
-var_dump($humanGeneDetails);
+
 $humanRandomFilename = '/tmp/'.uniqid();
 
 $outputRandomFilename = '/tmp/'.uniqid();

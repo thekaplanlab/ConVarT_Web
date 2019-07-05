@@ -123,11 +123,11 @@
         </div>
         <p class="center-align"><b>OR</b></p><br>
         <div class="row">
-        	<form action="blast_query.php" method="post" name="seqSearch" autocomplete="off">
+        	<form action="<?= $GLOBALS['base_url']; ?>blast_query.php" method="post" name="seqSearch" autocomplete="off">
 			    <div class="col l12 m12 s12"><center>
 			    <textarea id="sequenceArea" name="sequence" class="materialize-textarea sequenceArea" 
 			    placeholder=">NP_592921.1 putative AP-2 adaptor complex subunit Apm4 [S. pombe]&#x0a;MISGLFIFNLKGDTLICKTFRHDLKKSVTEIFRVAILTNTDYRHPIVSIGSSTYIYTKHEDLYVVAITKGNPNVMIVLEFLESLIQDLTHYFGKLNENTVKDNVSFIFELLDEMIDYGIIQTTEPDALARSVSITAVKKKGNALSLKRSHSSQLAHTTSSEIPGSVPWRRAGIKYRKNSIYIDIVERMNLLISSTGNVLRSDVSGVVKMRAMLSGMPECQFGLNDKLDFKLKQSESKSKSNNSRNPSSVNGGFVILEDCQFHQCVRLPEFENEHRITFIPPDGEVELMSYRSHENINIPFRIVPIVEQLSKQKIIYRISIRADYPHKLSSSLNFRIPVPTNVVKANPRVNRGKAGYEPSENIINWKIPRFLGETELIFYAEVELSNTTNQQIWAKPPISLDFNILMFTSSGLHVQYLRVSEPSNSKYKSIKWVRYSTRAGTCEIRI" required></textarea>
-			    <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div> <!-- -->
+			    <!-- <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div> -->
 			   <div class="row"><button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button></center></div>
 			</form>
         	<center><a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="Here is ConVarT (Conserved clinical Variation visualization Tool)! Check it out on " 
