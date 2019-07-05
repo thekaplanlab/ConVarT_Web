@@ -176,7 +176,7 @@
     </div> <!-- end of gene card -->
 
         <!-- Current Project Tool  -->
-        <iframe id="CurrentProjectTool" src="<?= $GLOBALS['base_url'];?>tool.php?msa_id=<?= $msa['id']; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
+        <iframe id="CurrentProjectTool2" src="<?= $GLOBALS['base_url'];?>tool.php?msa_id=<?= $msa['id']; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
         <p>
             +Please click the name of species for the protein accession number used in the alignment. 
             <br>+A <span class="red-text">* (asterisk)</span> used as a pointer to positions of post translational modifications in human.
@@ -440,7 +440,17 @@
       </p>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue white-text">Agree</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-white btn-flat blue white-text">Agree</a>
+    </div>
+</div>
+
+ <!-- Tool Pop-Up -->
+<div id="PopUpTool" class="modal modal-fixed-footer" style="width: 90% !important; height: 60% !important">
+    <div class="modal-content">
+      <iframe id="CurrentProjectTool" src="<?= $GLOBALS['base_url'];?>tool.php?msa_id=<?= $msa['id']; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-white btn-flat blue white-text">CLOSE</a>
     </div>
 </div>
 
@@ -455,6 +465,7 @@
     var event = new Event('mouseover');
 
     function goToVariation(position) {
+    	$('#PopUpTool').modal('open');
         var iframe = document.getElementById("CurrentProjectTool");
         iframe.scrollIntoViewIfNeeded();
 

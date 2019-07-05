@@ -296,7 +296,8 @@ li.indicator {background: #FFF !important;}
   color: #2196f3;
   height: 45px;
   outline: none;
-  margin-top: -7px;
+  margin-top: -10px;
+  margin-bottom: 5px;
 }
 
 [type="radio"]:not(:checked)+label, [type="radio"]:checked+label { padding-left: 25px !important; padding-right: 10px; font-style: italic; }
@@ -308,7 +309,7 @@ li.indicator {background: #FFF !important;}
   border-radius: 5px !important; 
   background: #FFF; 
   color: #1976D2; 
-  margin-top: -5px !important; 
+  /*margin-top: -5px !important;  */
   margin-bottom: -5px !important
 }
 .seqSearchButton > i {vertical-align: bottom !important; margin-right: 5px;}
