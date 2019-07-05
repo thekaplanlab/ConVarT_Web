@@ -334,13 +334,21 @@ header("Cache-Control: max-age=$seconds_to_cache");
         if(isset($geneInfoHuman['dbs']['ENST'])):
 
             $gnomADQuery = getGnomADData($geneInfoHuman['dbs']['ENST'], 'canonical_transcript', 'position, variation, variant_id'.
-                ',rs_number,consequence');
+                ',rs_number,consequence, allele_count, allele_number');
 
             while ($row = @mysqli_fetch_array($gnomADQuery)):
                 $position=$row['position'];
                 $variation=$row['variation'];
                 $new_variation = str_replace(array('(',')'), '', $variation);
-                $gnomADnote = 'Variation ID:<a href="https://gnomad.broadinstitute.org/variant/'.$row['variant_id'].'" target="_blank"> '.$row['variant_id'].'</a> <br> rsNumber: '.$row['rs_number'].'<br> '.$new_variation.' <br> '.$row['consequence'];
+                
+                if($row['allele_count'] == 0) {
+                	$freq = 0;
+                }
+                else {
+                	$freq = round(($row['allele_count'] / $row['allele_number']), 6);	
+                }
+
+                $gnomADnote = 'Variation ID:<a style="color:#1976D2 !important; font-size:15px !important;" href="https://gnomad.broadinstitute.org/variant/'.$row['variant_id'].'" target="_blank"> '.$row['variant_id'].'</a> <br> Frequency: '.$freq.' <br> rsNumber: '.$row['rs_number'].'<br> '.$new_variation.' <br> '.$row['consequence'];
         ?>
             ClinVar(1, <?php echo $position; ?>, ' <?php echo $gnomADnote; ?>', 'gnomAD');
         <?php endwhile; ?>
