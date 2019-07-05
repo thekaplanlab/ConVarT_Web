@@ -332,7 +332,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
               $new_variation = str_replace(array('(',')'), '', $variation);
               $clinvarnote = 'Variation ID: '.$row['variation_id'].' <br> rsNumber: '.$rs_number.'<br> '.$new_variation.' <br> '.$row['variant_type'].' <br> '.$row['clinical_significance'].'<br>'.$row['phenotypes'];
         ?>
-              ClinVar(1, <?php echo $position; ?>, ' <?php echo $clinvarnote; ?>', 'ClinVar');
+              ClinVar(1, <?php echo $position; ?>, ' <?php echo str_replace("'", "\\'",$clinvarnote); ?>', 'ClinVar');
         <?php endwhile; ?>
         <?php endif;?>
        
@@ -355,8 +355,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
        
         /* List the PTM Data */
         <?php
-        if(isset($geneInfoHuman['dbs']['uniprot'])):
-            $ptmQuery = getPtmData($geneInfoHuman['dbs']['uniprot'], 'acc_id', 'mod_rsd, ptm_type, position');
+
+        if(isset($geneInfoHuman['dbs']['UNIPROT'])):
+            $ptmQuery = getPtmData($geneInfoHuman['dbs']['UNIPROT'], 'acc_id', 'mod_rsd, ptm_type, position');
 
             while ($row = @mysqli_fetch_array($ptmQuery)):
                 $position=$row['position'];
@@ -375,7 +376,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 $position=$row['position'];
                 $COSMICnote = 'Mutation: '.$row['mutation_aa'].'<br>'.$row['mutation_id'].' <br>'.$row['primary_site'].'<br>Fathmm:'.$row['fathmm_prediction'].'|'.$row['fathmm_score'].'<br>';
         ?>
-            ClinVar(1, <?php echo $position; ?>, '<?php echo $COSMICnote; ?>', 'COSMIC');
+            ClinVar(1, <?php echo $position; ?>, '<?php echo str_replace("'", "\\'", $COSMICnote); ?>', 'COSMIC');
         <?php endwhile; ?>
         <?php endif; ?>    
 
