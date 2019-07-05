@@ -460,7 +460,7 @@
 
 <!-- Linking from Table to Viewer -->
 <script type="text/javascript">
-    $('.modal').modal();
+    $('.modal').modal({inDuration: 0, outDuration: 0, fadeDuration: 100});
     $('select').material_select();
     var event = new Event('mouseover');
 
