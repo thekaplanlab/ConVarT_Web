@@ -145,6 +145,8 @@
 		</span></div>
 		<div class="col s12 m12 l3"><span class="credits-text"><br><br> 
 			<a href="https://datatables.net/" target="_blank">DataTables jQuery Plug-in</a> <br>
+			<a href="https://www.ebi.ac.uk/Tools/psa/emboss_needle/" target="_blank">EMBOSS Needle</a> <br>
+			<a href="https://github.com/jrderuiter/pybiomart" target="_blank">PyBiomart</a> <br>
 		</span></div>
 
 	</div><br>
