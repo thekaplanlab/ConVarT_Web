@@ -378,7 +378,22 @@ header("Cache-Control: max-age=$seconds_to_cache");
         ?>
             ClinVar(1, <?php echo $position; ?>, '<?php echo $COSMICnote; ?>', 'COSMIC');
         <?php endwhile; ?>
-        <?php endif; ?>    
+        <?php endif; ?>   
+
+        /* List the dbSNP Data */
+ 		<?php
+        if(isset($geneInfoHuman['dbs']['ENST'])):
+            $dbSNPQuery = getdbSNPData($geneInfoHuman['dbs']['ENST'], 'Feature', 'Protein_position, HGVSp, Impact, Consequence');
+
+            while ($row = @mysqli_fetch_array($dbSNPQuery)):
+                $position=$row['Protein_position'];
+                $proteinChanges = $row['HGVSp'];
+                $clearProteinChange = explode(":", $proteinChanges)[1];
+                $dbSNPnote = 'Mutation: '.$clearProteinChange.'<br>'.$row['Consequence'].' <br> Impact: '.$row['Impact'].'<br>';
+        ?>
+            ClinVar(1, <?php echo $position; ?>, '<?php echo $dbSNPnote; ?>', 'dbSNP');
+        <?php endwhile; ?>
+        <?php endif; ?>  
 
     }
 
