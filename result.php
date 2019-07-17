@@ -95,6 +95,11 @@
         $ptmCounts = getPTMStats($humanGeneDetails['dbs']['UNIPROT']);
     } else {$ptmCounts = [];}
 
+    #Statistics dbSNP
+    if(isset($humanGeneDetails['dbs']['ENST'])){
+        $dbSNPCounts = getdbSNPStats(@$humanGeneDetails['dbs']['ENST']);
+    } else {$dbSNPCounts = [];}
+
     #Statistics COSMIC
     if(isset($humanGeneDetails['dbs']['ENST'])){
         $cosmicCounts = getCosmicStats(@$humanGeneDetails['dbs']['ENST']);
@@ -112,6 +117,9 @@
     }  elseif(! empty($cosmicCounts)){
         $dynamicChartTitle = 'COSMIC Variants By Annotation';
         $dynamicChart = 'cosmic';
+    }  elseif(! empty($dbSNPCounts)){
+        $dynamicChartTitle = 'dbSNP Variants By Annotation';
+        $dynamicChart = 'dbSNP';
     }
 
     #Disease Finder
@@ -152,8 +160,9 @@
                 <tr>
                 	<td><b>Statistics: </b> </td>
                 	<td><?php if(array_sum($clinVarCounts)): ?> ClinVar(<b><?= array_sum($clinVarCounts); ?></b>)<?php endif; ?>
-                		<?php if(array_sum($gnomADCounts) > 0):?> GnomAD(<b><?= array_sum($gnomADCounts); ?></b>)<?php endif;?>
+                		<?php if(array_sum($gnomADCounts) > 0):?> gnomAD(<b><?= array_sum($gnomADCounts); ?></b>)<?php endif;?>
                 		<?php if(array_sum($cosmicCounts) > 0):?> COSMIC(<b><?= array_sum($cosmicCounts); ?></b>)<?php endif;?>
+                		<?php if(array_sum($dbSNPCounts) > 0):?> dbSNP(<b><?= array_sum($dbSNPCounts); ?></b>)<?php endif;?>
                 		<?php if(array_sum($ptmCounts) > 0):?> PTM(<b><?= array_sum($ptmCounts); ?></b>)<?php endif;?>
                 	</td>
                 </tr>
@@ -326,6 +335,29 @@
                         <th>PUBMED PMID <i class="material-icons right">filter_list</i></th>
                         <th>Tumor Origin <i class="material-icons right">filter_list</i></th>
                         <th>Position <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>
+
+    <!-- dbSNP table -->
+    <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">chrome_reader_mode</i>dbSNP</div>
+        <div class="collapsible-body">
+            <div id="dbSNP_chart"></div>
+            <div class="table-wrapper"><table id="dbSNPtable" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>rsNumber <i class="material-icons right">filter_list</i></th>
+                        <th>HGVSp <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Impact <i class="material-icons right">filter_list</i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -598,6 +630,33 @@
         $('#ptmTable').removeClass('hide');
         <?php else: ?>
         $('#ptmTable').parent().parent().parent().hide();
+        <?php endif; ?>
+
+        <?php if(array_sum($dbSNPCounts) > 0): ?>
+        //dbSNP Table
+        $('#dbSNPTable').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+            <?php if(isset($humanGeneDetails['dbs']['ENST'])): ?>
+            "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=dbSNP&id=<?= urlencode(normalizeIds($humanGeneDetails['dbs']['ENST'])); ?>",
+            <?php endif; ?>
+            "columnDefs": [{
+                "targets": 3,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#dbSNPTable').removeClass('hide');
+        <?php else: ?>
+        $('#dbSNPTable').parent().parent().parent().hide();
         <?php endif; ?>
 
         <?php if(array_sum($cosmicCounts) > 0): ?>

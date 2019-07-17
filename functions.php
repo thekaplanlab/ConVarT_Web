@@ -351,6 +351,19 @@ function getCosmicStats($transcriptId, $column='accession_number'){
     return $countsForCosmic;
 }
 
+#dbSNP Chart Stats
+function getdbSNPStats($transcriptId, $column='Feature'){
+    global $db_connection;
+    $transcriptId = normalizeIds($transcriptId);
+    $dbSNPStatisticsQuery = mysqli_query($db_connection, "SELECT Impact, COUNT(dbsnp_index) FROM dbsnp WHERE dbsnp.{$column} IN ({$transcriptId}) GROUP BY Impact");    
+    $countsFordbSNP = [];
+    
+    while($row = mysqli_fetch_assoc($dbSNPStatisticsQuery)){
+        $countsFordbSNP[$row['Impact']] = $row['COUNT(dbsnp_index)'];
+    }
+    return $countsFordbSNP;
+}
+
 #PTM Chart Stats
 function getPTMStats($transcriptId, $column='acc_id'){
     global $db_connection;
@@ -406,6 +419,21 @@ function getCosmicData($transcriptId, $column='accession_number', $cols='*'){
 
     return $query;
 }
+
+function getdbSNPData($transcriptId, $column='Feature', $cols='*'){
+    global $db_connection;
+
+    if($transcriptId == null)
+        return null;
+
+    $query = mysqli_query($db_connection, "SELECT $cols FROM dbsnp WHERE {$column} IN ({$transcriptId}) ORDER BY Protein_position DESC");
+    
+    if(mysqli_num_rows($query) == 0)
+        return null;
+
+    return $query;
+}
+
 
 function searchProteinNumbers($value){
     global $db_connection;
