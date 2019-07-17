@@ -1,7 +1,7 @@
 <?php
 require_once('config.php');
 require_once('functions.php');
-/* 
+/* */
 
 if (isset($_POST['g-recaptcha-response'])) {
     $captcha = $_POST['g-recaptcha-response'];
@@ -18,7 +18,7 @@ if ($check_point->success == false) {
     //echo '<h2>Spam!!!!!</h2>';
     header("Location: index.php?err=verify_robot");
     exit;
-}*/
+}
 
 if (! isset($_REQUEST['sequence'])){
     exit;
