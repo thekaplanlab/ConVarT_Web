@@ -349,7 +349,7 @@
         <div class="collapsible-header active"><i class="material-icons">chrome_reader_mode</i>dbSNP</div>
         <div class="collapsible-body">
             <div id="dbSNP_chart"></div>
-            <div class="table-wrapper"><table id="dbSNPtable" class="special_table hide">
+            <div class="table-wrapper"><table id="dbSNPTable" class="special_table hide">
                 <thead>
                     <tr>
                         <th>Transcript ID <i class="material-icons right">filter_list</i></th>
@@ -775,6 +775,25 @@
         legend: { position: 'top', horizontalAlign: 'left', offsetX: 40 }
     }
 
+    // dbSNP Stats
+    var options_dbSNP = {
+        chart: { animations: {enabled: false}, height: 150, type: 'bar', stacked: true, stackType: '100%' },
+        plotOptions: { bar: { horizontal: true, }, },
+        stroke: { width: 1, colors: ['#fff'] },
+        series: [
+            <?php foreach ($dbSNPCounts as $key => $value) : ?>
+            {
+            name: '<?= ucwords(str_replace("_", " ", $key));; ?>',
+            data: [<?= $value; ?>]
+            },
+            <?php endforeach; ?>
+            ],
+        xaxis: { categories: [""] },
+        tooltip: { y: { formatter: function(val) { return val + " Variants" } } },
+        fill: { opacity: 1 },
+        legend: { position: 'top', horizontalAlign: 'left', offsetX: 40 }
+    }
+
     // COSMIC Stats
     var options_cosmic = {
         chart: { animations: {enabled: false}, height: 150, type: 'bar', stacked: true, stackType: '100%' },
@@ -833,6 +852,13 @@
     try{
     var chart_ptm = new ApexCharts( document.querySelector("#ptm_chart"), options_ptm );
     chart_ptm.render();
+
+    } catch{
+
+    }
+    try{
+    var chart_dbSNP = new ApexCharts( document.querySelector("#dbSNP_chart"), options_dbSNP );
+    chart_dbSNP.render();
 
     } catch{
 
