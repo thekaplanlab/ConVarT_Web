@@ -326,6 +326,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
           while ($row = @mysqli_fetch_array($ClinVarQuery)): 
               $position=$row['position'];
+              if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
               $variation=$row['variation'];
               $rs_number = $row['rs_number'];
               if($rs_number=="rs-1") {$rs_number="N/A";}
@@ -345,6 +348,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
             while ($row = @mysqli_fetch_array($gnomADQuery)):
                 $position=$row['position'];
+                if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
                 $variation=$row['variation'];
                 $new_variation = str_replace(array('(',')'), '', $variation);
                 
@@ -369,6 +375,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
             while ($row = @mysqli_fetch_array($ptmQuery)):
                 $position=$row['position'];
+                if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
                 $PTMnote = 'Mod_rsd: '.$row['mod_rsd'].'<br>PTM Type: '.$row['ptm_type'];
         ?>
             ClinVar(1, <?php echo $position; ?>, '<?php echo $PTMnote; ?>', 'PTM');
@@ -382,6 +391,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
             while ($row = @mysqli_fetch_array($cosmicQuery)):
                 $position=$row['position'];
+                if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
                 $COSMICnote = 'Mutation: '.$row['mutation_aa'].'<br>'.$row['mutation_id'].' <br>'.$row['primary_site'].'<br>Fathmm:'.$row['fathmm_prediction'].'|'.$row['fathmm_score'].'<br>';
         ?>
             ClinVar(1, <?php echo $position; ?>, '<?php echo str_replace("'", "\\'", $COSMICnote); ?>', 'COSMIC');
@@ -395,6 +407,9 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
             while ($row = @mysqli_fetch_array($dbSNPQuery)):
                 $position=$row['Protein_position'];
+                if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
                 $proteinChanges = $row['HGVSp'];
                 $clearProteinChange = explode(":", $proteinChanges)[1];
                 $dbSNPnote = 'Mutation: '.$clearProteinChange.'<br>'.$row['Consequence'].' <br> Impact: '.$row['Impact'].'<br>';
