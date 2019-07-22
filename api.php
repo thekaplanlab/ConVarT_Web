@@ -149,7 +149,7 @@ switch ($_GET['action']) {
                 $row['Gene'],
                 $row['Feature'],
                 $row['Consequence'],
-                $row['Protein_position'],
+                $row['Protein_position'] . '---' .$row['HGVSp'], 
                 $row['HGVSp'],
                 $row['Impact'],
                 $row['Uploaded_variation']
