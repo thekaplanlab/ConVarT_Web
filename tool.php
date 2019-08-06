@@ -96,12 +96,14 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 <div id="specieNames"></div>
             </section>
             <section id="GoToPosition">
-                Search # <input type="number" placeholder="Type a human position" name="position"> <br>
+                Search # <input type="number" placeholder="Type a position" name="position"> Species:<select name="species"></select><br>
                 <script type="text/javascript">
                   function positionKeyUp(){
                       var position =$('input[name=position]').val();
-                      var alignmentPosition = getAminoacidPositionInViewport(0, position-1);
-                   
+                      var species = parseInt($('select[name=species]').val());
+                      console.log(species);
+                      var alignmentPosition = getAminoacidPositionInViewport(species, position-1);
+                    
                       $('#position-number').remove();
                       $('.highlight-column').removeClass('highlight-column');
                       $('.ptmHighlighted').removeClass('ptmHighlighted');
@@ -111,11 +113,12 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
                       setTimeout(function() {
                         $('.i-'+alignmentPosition).addClass('highlight-column');
-                        $('#protein0 .ptm.i-'+alignmentPosition).addClass('ptmHighlighted');
+                        $('#protein'+species+' .ptm.i-'+alignmentPosition).addClass('ptmHighlighted');
                       }, 75);
                   
                   }
                   $('input[name=position]').on("keyup", positionKeyUp);
+                  $('select[name=species]').on("change", positionKeyUp);
                 </script>
             </section>
             <br><br>
@@ -261,7 +264,8 @@ header("Cache-Control: max-age=$seconds_to_cache");
           //Protein Name-Identifier
           let prName = txt.slice(startPr+1, endPr + 1);
           let prID = prName.split(" ")[0]; // 7 MART
-          let species = prName.split("[").slice(-1)[0].split("]")[0];  
+          let species = prName.split("[").slice(-1)[0].split("]")[0]; 
+          $('select[name=species]').html($('select[name=species]').html()+'<option value="'+j+'">'+species+'</option>'); 
           let species_by_word = species.split(" ");
           species = species_by_word[0][0]+". " + species_by_word[1]; 
           //Protein sequences slicing
