@@ -352,11 +352,11 @@
             <div class="table-wrapper"><table id="dbSNPTable" class="special_table hide">
                 <thead>
                     <tr>
+                        <th>Gene ID <i class="material-icons right">filter_list</i></th>
                         <th>Transcript ID <i class="material-icons right">filter_list</i></th>
-                        <th>rsNumber <i class="material-icons right">filter_list</i></th>
-                        <th>HGVSp <i class="material-icons right">filter_list</i></th>
-                        <th>Position <i class="material-icons right">filter_list</i></th>
                         <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>HGVSp <i class="material-icons right">filter_list</i></th>
                         <th>Impact <i class="material-icons right">filter_list</i></th>
                     </tr>
                 </thead>
@@ -642,9 +642,17 @@
             "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=dbSNP&id=<?= urlencode(normalizeIds($humanGeneDetails['dbs']['ENST'])); ?>",
             <?php endif; ?>
             "columnDefs": [{
+                "targets": 1,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" target="_blank" href="https://www.ensembl.org/id/'+data+'">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            },{
                 "targets": 3,
                 "render": function(data, type, row) {
-                    return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+                    var position = data.split('---')[1];
+                    data = data.split('---')[0].split(":")[1]; 
+                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             }], 
