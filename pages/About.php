@@ -117,7 +117,7 @@
 	    <div class="col s12 m12 l3"><span class="credits-text"><b>Principal Investigators</b> <br> Oktay I. Kaplan <br> Sebiha Cevik</span></div>
 	    <div class="col s12 m12 l3"><span class="credits-text"><b>Data Production Team </b> <br> Halil  I. Bilgin<br> Furkan M. Torun</span></div>
 	    <div class="col s12 m12 l3"><span class="credits-text"><b>Web Site Team</b> <br>Halil  I. Bilgin<br>Furkan M. Torun </span></div>
-	    <div class="col s12 m12 l3"><span class="credits-text"><b>Experimental Team </b> <br> Pei Zhao<br> Yahong Kang</span></div>
+	    <div class="col s12 m12 l3"><span class="credits-text"><b>Experimental Team </b> <br> Pei Zhao (SunyBiotech Co.,Ltd)<br> Yahong Kang (SunyBiotech Co.,Ltd) <br> Mustafa S. Pir</span></div>
 	    
 		<div class="col s12 m12 l3"><span class="credits-text"><br><b>Databases and Tools</b> <br> 
 			<a href="https://www.ncbi.nlm.nih.gov/clinvar/" target="_blank"> ClinVar</a> <br> 
