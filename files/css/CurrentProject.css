@@ -61,6 +61,7 @@ nav ul a:hover {background: #1976D2 !important}
 #sidenav-overlay {z-index: 0 !important;}
 
 .dropdown-content {top: 50px !important; width: 155px !important;}
+.autoCompletePart > .dropdown-content { width: 300px !important; }
 .dropdown-content li>a {color: #2a76d2 !important;}
 .dropdown-content li:hover > a {color:#FFF !important;}
 .dropdown-button > i.right {margin-left: 1px !important; margin-right: -15px !important;line-height: 2.55em;}

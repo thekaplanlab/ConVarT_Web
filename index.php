@@ -79,12 +79,32 @@
             <div class="col s12">
               <ul class="tabs searching-tabs">
                 <li class="tab searching-tab col s12 m12 l3"></li>
-                <li class="tab searching-tab col s12 m12 l2"><a class="active" href="#gene-search">Gene Search</a></li>
+                <li class="tab searching-tab col s12 m12 l2"><a class="active" href="#spemud-search"><b>S</b>pe<b>M</b>u<b>D</b></a></li>
+                <li class="tab searching-tab col s12 m12 l2"><a href="#gene-search">Gene Search</a></li>
                 <li class="tab searching-tab col s12 m12 l2"><a href="#disease-search">Disease Search</a></li>
-                <li class="tab searching-tab col s12 m12 l2"><a href="#spemud-search"><b>S</b>pe<b>M</b>u<b>D</b></a></li>
                 <li class="tab searching-tab col s12 m12 l3"></li>
               </ul>
             </div>
+
+            <!-- Spemud search -->
+            <div id="spemud-search" class="col s12">
+            <br><p class="center-align"><b>Select your proteins and visualize them with variants:</b></p>
+                <form action="<?= $GLOBALS['base_url']; ?>show" method="get" class="spemudForm" autocomplete="off">
+                        <div class="col s1 m1 l4"></div>
+                        <div class="col s9 m9 l4 autoCompletePart">
+                            <input name="human_prot_id" id="human_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a human gene name or protein ID" required>
+                            <input name="mouse_prot_id" id="mouse_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a mouse gene name or protein ID" required>
+                            <input name="cel_prot_id" id="cel_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a C. elegans gene name or protein ID" required>
+                    </div>
+                    <div class="col s1 m1 l4"></div>
+                    <div class="col s1 m1 l12"><center>
+                        <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button>
+                    </center></div>
+                </form>
+
+            </div>
+
+            <!-- gene search -->
             <div id="gene-search" class="col s12">
               <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="mainForm" autocomplete="off">
                 <div class="col s1 m1 l3"></div>
@@ -104,7 +124,28 @@
                 <div class="col s1 m1 l1"><button class="btn waves-effect waves-light waves-white sb" type="submit"><i class="material-icons">search</i></button></div>
                 <div class="col s1 m1 l3"></div>
                 </form>
+                
+                <br><br><br><br><br><br>
+                
+                <!-- Sequence Search in gene search -->
+                <p class="center-align"><b>OR</b></p><br>
+                <div class="row">
+                    <form action="<?= $GLOBALS['base_url']; ?>blast_query.php" method="post" name="seqSearch" autocomplete="off">
+                        <div class="col l12 m12 s12"><center>
+                        <textarea id="sequenceArea" name="sequence" class="materialize-textarea sequenceArea" 
+                        placeholder=">NP_592921.1 putative AP-2 adaptor complex subunit Apm4 [S. pombe]&#x0a;MISGLFIFNLKGDTLICKTFRHDLKKSVTEIFRVAILTNTDYRHPIVSIGSSTYIYTKHEDLYVVAITKGNPNVMIVLEFLESLIQDLTHYFGKLNENTVKDNVSFIFELLDEMIDYGIIQTTEPDALARSVSITAVKKKGNALSLKRSHSSQLAHTTSSEIPGSVPWRRAGIKYRKNSIYIDIVERMNLLISSTGNVLRSDVSGVVKMRAMLSGMPECQFGLNDKLDFKLKQSESKSKSNNSRNPSSVNGGFVILEDCQFHQCVRLPEFENEHRITFIPPDGEVELMSYRSHENINIPFRIVPIVEQLSKQKIIYRISIRADYPHKLSSSLNFRIPVPTNVVKANPRVNRGKAGYEPSENIINWKIPRFLGETELIFYAEVELSNTTNQQIWAKPPISLDFNILMFTSSGLHVQYLRVSEPSNSKYKSIKWVRYSTRAGTCEIRI" required></textarea>
+                        <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div>
+                    <div class="row"><button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button></center></div>
+                    </form>
+                    <center><a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="Here is ConVarT (Conserved clinical Variation visualization Tool)! Check it out on " 
+                        data-url="http://www.convart.org/" data-hashtags=" ConVarT,ModelOrganismCommunity" data-show-count="true" data-via="CiliopathyLab" data-lang="en"> Tweet </a></center>
+                    <!--<div class="chip"> Our work will be presented at <a href="eshg2019">#ESHG2019</a> on 17th June. <i class="close material-icons">close</i> </div>
+                        <a href="<?= $GLOBALS['base_url']; ?>seqSearch.php" class="btn waves-effect waves-light waves-blue white blue-text center seqSearchButtonHome"><i class="material-icons left">format_align_center</i> Search with protein sequence</a><br> -->
+                </div>
+                
             </div>
+            
+            <!-- disease search -->
             <div id="disease-search" class="col s12">
                 <form action="<?= $GLOBALS['base_url']; ?>disease" method="get" class="mainForm" autocomplete="off">
                 <div class="col s1 m1 l3"></div>
@@ -116,26 +157,8 @@
                 <div class="col s1 m1 l3"></div>
                 </form>
             </div>
-            <div id="spemud-search" class="col s12">
-                <br>
-                <center><span id="flow-text">Coming soon!</span><br>
-            	<br> <b>S</b>pe<b>M</b>u<b>D</b>: Species Mutation Database</center>
-            </div>
         </div>
-        <p class="center-align"><b>OR</b></p><br>
-        <div class="row">
-        	<form action="<?= $GLOBALS['base_url']; ?>blast_query.php" method="post" name="seqSearch" autocomplete="off">
-			    <div class="col l12 m12 s12"><center>
-			    <textarea id="sequenceArea" name="sequence" class="materialize-textarea sequenceArea" 
-			    placeholder=">NP_592921.1 putative AP-2 adaptor complex subunit Apm4 [S. pombe]&#x0a;MISGLFIFNLKGDTLICKTFRHDLKKSVTEIFRVAILTNTDYRHPIVSIGSSTYIYTKHEDLYVVAITKGNPNVMIVLEFLESLIQDLTHYFGKLNENTVKDNVSFIFELLDEMIDYGIIQTTEPDALARSVSITAVKKKGNALSLKRSHSSQLAHTTSSEIPGSVPWRRAGIKYRKNSIYIDIVERMNLLISSTGNVLRSDVSGVVKMRAMLSGMPECQFGLNDKLDFKLKQSESKSKSNNSRNPSSVNGGFVILEDCQFHQCVRLPEFENEHRITFIPPDGEVELMSYRSHENINIPFRIVPIVEQLSKQKIIYRISIRADYPHKLSSSLNFRIPVPTNVVKANPRVNRGKAGYEPSENIINWKIPRFLGETELIFYAEVELSNTTNQQIWAKPPISLDFNILMFTSSGLHVQYLRVSEPSNSKYKSIKWVRYSTRAGTCEIRI" required></textarea>
-			    <div class="g-recaptcha" data-sitekey="6LdZMaMUAAAAAAJdY4SpK0vOHHFnf-Ff5iVOp1K4"></div>
-			   <div class="row"><button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button></center></div>
-			</form>
-        	<center><a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="Here is ConVarT (Conserved clinical Variation visualization Tool)! Check it out on " 
-        		data-url="http://www.convart.org/" data-hashtags=" ConVarT,ModelOrganismCommunity" data-show-count="true" data-via="CiliopathyLab" data-lang="en"> Tweet </a></center>
-        	<!--<div class="chip"> Our work will be presented at <a href="eshg2019">#ESHG2019</a> on 17th June. <i class="close material-icons">close</i> </div>
-        		<a href="<?= $GLOBALS['base_url']; ?>seqSearch.php" class="btn waves-effect waves-light waves-blue white blue-text center seqSearchButtonHome"><i class="material-icons left">format_align_center</i> Search with protein sequence</a><br> -->
-        </div>
+        
      
     </div> <!-- ConVarT -->
 
@@ -199,7 +222,7 @@
     </div>
     </div>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="files/js/js.js"></script>
     <script src="files/js/CurrentProject.js"></script>
 

@@ -213,27 +213,61 @@ $(document).ready(function(){
 
 });
 
+// Spemud search autocomplete
+$(document).ready(function() {
+
+	// Ajax for human proteins
+	$('#human_prot_id').autocomplete({
+		//data = JSONfromPHP,
+		data: { "TP53 - NP_123": null, "TP53 - NP_234": null, "TP53 - XP_456": null, },
+		limit: 20,
+		onAutocomplete: function(val) {},
+		limit: 20,
+		minLength: 1, 
+	});
+
+	// Ajax for mouse proteins
+	$('#mouse_prot_id').autocomplete({
+		//data = JSONfromPHP,
+		data: { "ARL13B - NP_9123": null, "ARL13B - NP_5234": null, "ARL13B - XP_7456": null, },
+		limit: 20,
+		onAutocomplete: function(val) {},
+		limit: 20,
+		minLength: 1, 
+	});
+
+	// Ajax for C. elegans proteins
+	$('#cel_prot_id').autocomplete({
+		//data = JSONfromPHP,
+		data: { "osm5 - NP_021": null, "osm5 - NP_034": null, "osm5 - XP_0456": null, },
+		limit: 20,
+		onAutocomplete: function(val) {},
+		limit: 20,
+		minLength: 1, 
+	});
+
+});
 
 
 
-
-
-
-
-/* Auto Complete 
-$(function() {
-  $('#searchTerm').autocomplete({
-    data: {
-      "Apple": null,
-      "Microsoft": null,
-      "Google": null,
-    }
-  });
-  $('#searchTerm2').autocomplete({
-    data: {
-      "Apple": null,
-      "Microsoft": null,
-      "Google": null, 
-    }
-  });
-}); */
+// Ajax for human proteins
+  // $(document).ready(function() {
+    // $.getJSON('/get_protein_lists.php?species=hsa', function(data) {
+    //     // Create skills object to hold skill names
+    //     var skills = new Object();
+    //     data.forEach(function(skill_list) {
+    //         skills[skill_list.skill_name] = null;
+    //     });
+        // Protein IDs and Gene names autocomplete
+        // $('.chips').chips();
+    //     $('.chips-autocomplete').chips({
+    //         placeholder: 'Type a gene name or protein ID',
+    //         autocompleteOptions: {
+    //             data: skills,
+    //             limit: 1,
+    //             minLength: 1
+    //         }
+    //     });
+    // });
+  //   return false;
+  // });
