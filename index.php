@@ -92,11 +92,11 @@
                 <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="spemudForm" autocomplete="off">
                         <div class="col s1 m1 l4"></div>
                         <div class="col s9 m9 l4">
-                            <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name/symbol" required>
-                            <p class="center-align">Example: <i>HARS</i></p>
+                            <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name or protein ID" required>
+                            <p class="center-align">Example: <i>HARS</i>, NP_123456</p>
                     </div>
                     <div class="col s1 m1 l4"></div>
-                    <div class="col s1 m1 l12"><center>
+                    <div class="col s1 m1 l12"><center><br>
                         <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>ANALYSE</button>
                     </center></div>
                 </form>
