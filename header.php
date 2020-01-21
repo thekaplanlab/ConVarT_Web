@@ -12,7 +12,7 @@
     <link rel="icon" href="<?= $GLOBALS['base_url']; ?>files/img/convart_black.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="<?= $GLOBALS['base_url']; ?>files/css/style.css" media="screen"/>
-    <link type="text/css" rel="stylesheet" href="<?= $GLOBALS['base_url']; ?>files/css/CurrentProject.css?id=v3"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="<?= $GLOBALS['base_url']; ?>files/css/CurrentProject.css?id=v4"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
