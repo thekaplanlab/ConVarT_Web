@@ -479,6 +479,51 @@ function searchProteinNumbers($value){
 
 }
 
+
+function search_spemud_proteins($spemud_value) {
+    global $db_connection;
+    if (empty($spemud_value))
+        return null;
+
+    $query_ids = mysqli_query($db_connection, "SELECT mapping_human.gene_id AS human_gene_id, homology.mouse_gene_id, homology.worm_gene_id FROM mapping_human INNER JOIN homology ON mapping_human.gene_id = homology.human_gene_id WHERE mapping_human.gene_symbol='$spemud_value' OR FIND_IN_SET('$spemud_value', mapping_human.gene_synonyms) OR FIND_IN_SET('$spemud_value', mapping_human.protein_numbers)");
+    if(mysqli_num_rows($query_ids) == 0){
+        return null;
+    }
+    
+    $spemud_gene_id_array = [
+        "human" => "",
+        "mouse" => "",
+        "worm" => "",
+    ];
+
+    $row = mysqli_fetch_assoc($query_ids);
+    $spemud_gene_id_array["human"] = $row["human_gene_id"];
+    $spemud_gene_id_array["mouse"] = $row["mouse_gene_id"];
+    $spemud_gene_id_array["worm"] = $row["worm_gene_id"];
+
+    $block_result = "";
+    foreach ($spemud_gene_id_array as $key => $value) {
+        $gene_id_array = explode(",", $value);
+        $block_result .= "<div class='row pageTitle'>Results for $key <hr></div>";
+        for ($i=0; $i < count($gene_id_array) ; $i++) { 
+            $temp_gene_id = $gene_id_array[$i];
+            $query_protein_ids = mysqli_query($db_connection, "SELECT nc1.ncbi_gene_id, nc2.meta_value AS gene_symbol, nc1.meta_value AS prot_ids, cdb.convart_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN convart_gene_to_db AS cdb ON nc1.meta_value=cdb.db_id WHERE nc1.ncbi_gene_id=$temp_gene_id AND nc1.meta_key='protein_number' AND nc2.meta_key='gene_symbol'");
+            if(mysqli_num_rows($query_protein_ids) == 0){
+                return null;
+            }
+            $row_prots = mysqli_fetch_assoc($query_protein_ids);
+            // echo $key . " =>" . $gene_id_array[$i] ."<br><br>";
+            $temp_gene_symbol = $row_prots['gene_symbol'];
+            $temp_prot_ids = $row_prots['prot_ids'];
+            $temp_convart_ids = $row_prots['convart_gene_id'];
+            $spemud_radio_button = "<div><input name='$key' value='$temp_convart_ids' type='radio' /> <span>$temp_gene_symbol | $temp_prot_ids</span> </label></div><br>";
+            $block_result .= $spemud_radio_button;
+        }
+    }
+    return $block_result;
+}
+
+
 function getGeneIdbyDBId($id, $db='NM'){
     global $db_connection;
     $idWithoutVersion =  explode('.', $id)[0];
