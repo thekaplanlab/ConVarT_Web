@@ -88,17 +88,16 @@
 
             <!-- Spemud search -->
             <div id="spemud-search" class="col s12">
-            <br><p class="center-align"><b>Select your proteins and visualize them with variants:</b></p>
-                <form action="<?= $GLOBALS['base_url']; ?>show" method="get" class="spemudForm" autocomplete="off">
+            <!-- <br><p class="center-align"><b>Select your proteins and visualize them with variants:</b></p> -->
+                <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="spemudForm" autocomplete="off">
                         <div class="col s1 m1 l4"></div>
-                        <div class="col s9 m9 l4 autoCompletePart">
-                            <input name="human_prot_id" id="human_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a human gene name or protein ID" required>
-                            <input name="mouse_prot_id" id="mouse_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a mouse gene name or protein ID" required>
-                            <input name="cel_prot_id" id="cel_prot_id" type="text" class="autocomplete searchbox" placeholder="Type a C. elegans gene name or protein ID" required>
+                        <div class="col s9 m9 l4">
+                            <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name/symbol" required>
+                            <p class="center-align">Example: <i>HARS</i></p>
                     </div>
                     <div class="col s1 m1 l4"></div>
                     <div class="col s1 m1 l12"><center>
-                        <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>SEARCH</button>
+                        <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>ANALYSE</button>
                     </center></div>
                 </form>
 
