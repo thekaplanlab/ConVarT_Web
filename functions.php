@@ -88,6 +88,17 @@ function getConvartGeneIdByDbId($transcriptId){
     return $row['convart_gene_id'];
 
 }
+
+function getTranscriptIdByConvartGeneId($convartGeneId){
+    global $db_connection;
+    
+    $query = mysqli_query($db_connection, "SELECT db_id FROM convart_gene_to_db WHERE convart_gene_id ='$convartGeneId' LIMIT 1");
+    $row = mysqli_fetch_assoc($query);
+
+    return $row['db_id'];
+
+}
+
 function getMSAByGeneId($convartGeneId, $withFasta= true){
     global $db_connection;
     $withoutVersion = explode('.', $convartGeneId)[0];
