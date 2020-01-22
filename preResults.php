@@ -73,7 +73,7 @@
     <!-- Spemud -->
     <?php if ($spemud_searchText != ""): ?>
         <?php $proteinsBySpemud = search_spemud_proteins($spemud_searchText); ?>
-        <form action="<?= $GLOBALS['base_url']; ?>show.php" method="get">
+        <form action="<?= $GLOBALS['base_url']; ?>result2.php" method="get">
             <?php if($proteinsBySpemud == ""): ?>
                 <a href="#" class="btn waves-effect waves-light preResultBtnEmpty">No finding for "<?= $spemud_searchText; ?>"</a>
             <?php else: ?>
