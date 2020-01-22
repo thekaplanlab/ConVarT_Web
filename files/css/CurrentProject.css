@@ -299,7 +299,7 @@ li.indicator {background: #FFF !important;}
   margin-bottom: 5px;
 }
 
-[type="radio"]:not(:checked)+label, [type="radio"]:checked+label { padding-left: 25px !important; padding-right: 10px; }
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label { padding-left: 25px !important; padding-right: 10px; font-size: 20px !important; }
 [type="radio"]:checked + label::after, [type="radio"].with-gap:checked + label::after { background-color: #2196F3 !important; }
 [type="radio"]:checked + label::after, [type="radio"].with-gap:checked + label::before, [type="radio"].with-gap:checked + label::after { border: 2px solid #2196F3 !important; }
 
@@ -316,7 +316,7 @@ li.indicator {background: #FFF !important;}
 
 /* Radio buttons */
 
-.convart-radio {margin-right: 16px; margin-bottom: 15px; display: inline-block;}
+.convart-radio {margin-right: 16px; margin-bottom: 15px;}
   
 [type="radio"]:not(:checked) + span, [type="radio"]:checked + span {
   position: relative;
@@ -325,7 +325,7 @@ li.indicator {background: #FFF !important;}
   display: inline-block;
   height: 25px;
   line-height: 25px;
-  font-size: 21px;
+  font-size: 20px !important;
   -webkit-transition: .28s ease;
   transition: .28s ease;
   pointer-events: auto !important;
