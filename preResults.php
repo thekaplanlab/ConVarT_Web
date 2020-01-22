@@ -20,7 +20,7 @@
     
     // Select the path: Spemud or Gene search 
     if ($spemud_searchText != "") {
-        $deneme = "aliveli";
+        $active = "active_spmud";
         // $proteinsBySpemud = search_spemud_proteins($spemud_searchText);
     }
 
@@ -65,110 +65,6 @@
     require("header.php"); 
 ?>
 
-<!-- DUZENLE BURAYI -->
-<style type="text/css">
-            /* Radio buttons */
-            [type="radio"]:not(:checked) + span, [type="radio"]:checked + span {
-                position: relative;
-                padding-left: 35px;
-                cursor: pointer;
-                display: inline-block;
-                height: 25px;
-                line-height: 25px;
-                font-size: 1rem;
-                -webkit-transition: .28s ease;
-                transition: .28s ease;
-            }
-            [type="radio"]:not(:checked), [type="radio"]:checked {
-                position: relative !important;
-                opacity: 0.75 !important;
-                pointer-events: fill !important;
-            }
-
-        [type="radio"] + span:before, [type="radio"] + span:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            margin: 4px;
-            width: 16px;
-            height: 16px;
-            z-index: 0;
-            -webkit-transition: .28s ease;
-            transition: .28s ease
-        }
-
-        [type="radio"]:not(:checked) + span:before, [type="radio"]:not(:checked) + span:after,
-        [type="radio"]:checked + span:before, [type="radio"]:checked + span:after,
-        [type="radio"].with-gap:checked + span:before, [type="radio"].with-gap:checked + span:after {
-            border-radius: 50%
-        }
-
-        [type="radio"]:not(:checked) + span:before, [type="radio"]:not(:checked) + span:after {
-            border: 2px solid #5a5a5a
-        }
-
-        [type="radio"]:not(:checked) + span:after {
-            -webkit-transform: scale(0);
-            transform: scale(0)
-        }
-
-        [type="radio"]:checked + span:before {
-            border: 2px solid transparent
-        }
-
-        [type="radio"]:checked + span:after, [type="radio"].with-gap:checked + span:before,
-        [type="radio"].with-gap:checked + span:after {
-            border: 2px solid #26a69a
-        }
-
-        [type="radio"]:checked + span:after, [type="radio"].with-gap:checked + span:after {
-            background-color: #26a69a
-        }
-
-        [type="radio"]:checked + span:after {
-            -webkit-transform: scale(1.02);
-            transform: scale(1.02)
-        }
-
-        [type="radio"].with-gap:checked + span:after {
-            -webkit-transform: scale(0.5);
-            transform: scale(0.5)
-        }
-
-        [type="radio"].tabbed:focus + span:before {
-            -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1)
-        }
-
-        [type="radio"].with-gap:disabled:checked + span:before {
-            border: 2px solid rgba(0, 0, 0, 0.42)
-        }
-
-        [type="radio"].with-gap:disabled:checked + span:after {
-            border: none;
-            background-color: rgba(0, 0, 0, 0.42)
-        }
-
-        [type="radio"]:disabled:not(:checked) + span:before, [type="radio"]:disabled:checked + span:before {
-            background-color: transparent;
-            border-color: rgba(0, 0, 0, 0.42)
-        }
-
-        [type="radio"]:disabled + span {
-            color: rgba(0, 0, 0, 0.42)
-        }
-
-        [type="radio"]:disabled:not(:checked) + span:before {
-            border-color: rgba(0, 0, 0, 0.42)
-        }
-
-        [type="radio"]:disabled:checked + span:after {
-            background-color: rgba(0, 0, 0, 0.42);
-            border-color: #949494
-        }
-            </style>
-
 <!-- CurrentProject PreResult Page -->
 <div class="container pageBox">
 
@@ -181,8 +77,12 @@
             <?php if($proteinsBySpemud == ""): ?>
                 <a href="#" class="btn waves-effect waves-light preResultBtnEmpty">No finding for "<?= $spemud_searchText; ?>"</a>
             <?php else: ?>
+                <div class="card-panel blue">
+                    <span class="white-text">Select at least one transcript (protein isoform) from the species. Then, press "Analyse" to visualize and list the variants.
+                    </span>
+                </div>
                 <?php print($proteinsBySpemud); ?>
-                <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>ANALYSE</button>
+                <center><br><button class="btn waves-effect waves-light waves-white sb seqSearchButton" id="startAnalyse" type="submit"><i class="material-icons">search</i>ANALYSE</button></center>
         </form>
     <?php endif;?>
 
@@ -228,7 +128,44 @@
 </div>
 
 <script type="text/javascript">
+$(document).ready(function() {
 	$('.modal').modal();
+    $("#startAnalyse").addClass("disabled");
+    $("form :input").change(function() {
+        var number_of_human = document.getElementsByName("human")
+        var number_of_mouse = document.getElementsByName("mouse")
+        var number_of_worm = document.getElementsByName("worm")
+        var total_point = 0; //must be 3 for the analysis
+
+        for (let index = 0; index < number_of_human.length; index++) {
+            const temp_id = number_of_human[index].getAttribute("id");
+            if(document.getElementById(temp_id).checked) {
+                total_point += 1
+            } 
+        }
+
+        for (let index = 0; index < number_of_mouse.length; index++) {
+            const temp_id = number_of_mouse[index].getAttribute("id");
+            if(document.getElementById(temp_id).checked) {
+                total_point += 1
+            } 
+        }
+
+        for (let index = 0; index < number_of_worm.length; index++) {
+            const temp_id = number_of_worm[index].getAttribute("id");
+            if(document.getElementById(temp_id).checked) {
+                total_point += 1
+            } 
+        }
+        if(total_point!=3) {
+            $("#startAnalyse").addClass("disabled");
+        }
+        else {
+            $("#startAnalyse").removeClass("disabled");
+        }
+    });
+});
+
 </script>
 
 
