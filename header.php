@@ -79,6 +79,7 @@
             <div class="col s3 m3 l3">
                 <div class="input-field col s12 searchingOptions"><select class="searchingOption" id="searchingOption">
                     <option value="GeneSearch" selected>Gene Search</option>
+                    <option value="SpemudSearch">Spemud Search</option>
                     <option value="DiseaseSearch">Disease Search</option>
                 </select></div>
             </div>
@@ -102,6 +103,7 @@
         $( "#searchingOption" ).change(function() {
             searchingOption = document.getElementById("searchingOption").value;
             if (searchingOption == "DiseaseSearch") {placeholder="Search a disease name"}
+            if (searchingOption == "SpemudSearch") {placeholder="Search a human gene name or protein ID"}
             if (searchingOption == "GeneSearch") {placeholder="Search a gene, GeneID, Ensembl ID or protein number"}
 
             $('#searchTerm').attr("placeholder", placeholder);
@@ -110,10 +112,15 @@
             e.preventDefault();
             searchingOption = document.getElementById("searchingOption").value;
             if (searchingOption == "DiseaseSearch") {searchingPage = "disease"; placeholder="Search a disease name"}
+            if (searchingOption == "SpemudSearch") {searchingPage = "search"; placeholder="Search a human gene name or protein ID"}
             if (searchingOption == "GeneSearch") {searchingPage = "search"; placeholder="Search a gene, GeneID, Ensembl ID or protein number"}
 
-            window.location.href = $(this).prop('action') + searchingPage + '?q=' +  encodeURIComponent($('#searchTerm').val());
-
+            if (searchingOption == "SpemudSearch") {
+                window.location.href = $(this).prop('action') + searchingPage + '?spemud=' +  encodeURIComponent($('#searchTerm').val());
+            }
+            else {
+                window.location.href = $(this).prop('action') + searchingPage + '?q=' +  encodeURIComponent($('#searchTerm').val());
+            }
             return false;
         });
     </script>
