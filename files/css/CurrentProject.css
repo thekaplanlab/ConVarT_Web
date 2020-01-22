@@ -111,7 +111,7 @@ a.home_link:hover {text-decoration: underline;}
 .specialTextBox {margin: 0px 70px !important;}
 .specialTextBox > span {text-align: justify !important;}
 
-.searching-tabs {background: #2a76d2 !important; margin-bottom: 10px;}
+.searching-tabs {background: #1976d2 !important; margin-bottom: 10px;}
 .searching-tabs .searching-tab a, .searching-tabs .searching-tab a {color: #FFF; border: 1px solid #FFF;}
 .searching-tabs .searching-tab a:hover, .searching-tabs .searching-tab a.active {background: #FFF !important; color: #2a76d2;}
 
