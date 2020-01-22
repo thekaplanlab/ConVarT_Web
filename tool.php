@@ -280,7 +280,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
           var SpecieName = document.createElement("div");
           var SpecieNameLink = document.createElement("a");
           var prType = prName.substring(0, 2);
-          console.log('hey', prType);
+          //console.log('hey', prType);
           if (prType == "NP" || prType == "XP" ) {
           	SpecieNameLink.setAttribute("href", "https://www.ncbi.nlm.nih.gov/protein/" + prID);
           }
