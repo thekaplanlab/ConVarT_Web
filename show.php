@@ -11,25 +11,8 @@
   require_once("db_connection.php");
   require_once("functions.php");
 
-    $human_convart_id = $_GET["human"];
-    $mouse_convart_id = $_GET["mouse"];
-    $worm_convart_id = $_GET["worm"];
-    $convart_id_list = array($human_convart_id, $mouse_convart_id, $worm_convart_id);
-    sort($convart_id_list);
-
-
-    if ($human_convart_id == "" || $mouse_convart_id == "" || $worm_convart_id =="")
-      exit;
-
-    $str_convart_ids = implode(",",$convart_id_list);
-
-    #Get MSA
-    $msaIdQuery = mysqli_query($db_connection, "SELECT GROUP_CONCAT(convart_gene_id) AS ids, msa_id FROM msa_gene GROUP BY msa_id HAVING ids = '$str_convart_ids' LIMIT 1");
-    if (mysqli_num_rows($msaIdQuery) == 0) {
-      return null;
-    }
-    $msa_id = (int) mysqli_fetch_assoc($msaIdQuery)["msa_id"];
-    $msa = getMSAById($msa_id);
+    $msaId = (int) $_GET['msa_id'];
+    $msa = getMSAById($msaId);
     $fasta = $msa['fasta'];
 
     #Gene Info
@@ -85,7 +68,7 @@
 <body>
 
     <!-- Current Project Tool -->
-    <section id="CurrentProjectTool">
+    <section id="CurrentProjectTool" >
             <!--Current Project | Domains and Sequences Parts -->
             <section id="Domain-Sequence">
                 
