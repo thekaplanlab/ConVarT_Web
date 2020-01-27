@@ -139,6 +139,22 @@ switch ($_GET['action']) {
         }
         break;
 
+    case 'mouseVariants':
+        $mouseQuery = getMouseVariantsData($id);
+        $data = [];
+
+        while($row = mysqli_fetch_assoc($mouseQuery)){
+            $data[] = [
+                $row['ensembl_gene_id'],
+                $row['gene_symbol'],
+                $row['ensembl_transcript_id'],
+                $row['aa_change'],
+                $row['mutation_type'],
+                $row['Position'],
+            ];
+        }
+        break;
+
 
     case 'dbSNP':
         $dbSNPQuery = getdbSNPData($id);
