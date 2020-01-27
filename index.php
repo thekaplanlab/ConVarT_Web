@@ -93,7 +93,7 @@
                         <div class="col s1 m1 l4"></div>
                         <div class="col s9 m9 l4">
                             <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name or protein ID" required>
-                            <p class="center-align">Example: <i>HARS</i>, NP_123456</p>
+                            <p class="center-align">Example: <i>HARS</i>, NP_000010</p>
                     </div>
                     <div class="col s1 m1 l4"></div>
                     <div class="col s1 m1 l12"><center><br>
