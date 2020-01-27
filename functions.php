@@ -530,7 +530,7 @@ function search_spemud_proteins($spemud_value) {
     if (empty($spemud_value))
         return null;
 
-    $query_ids = mysqli_query($db_connection, "SELECT mapping_human.gene_id AS human_gene_id, homology.mouse_gene_id, homology.worm_gene_id FROM mapping_human INNER JOIN homology ON mapping_human.gene_id = homology.human_gene_id WHERE mapping_human.gene_symbol='$spemud_value' OR FIND_IN_SET('$spemud_value', mapping_human.gene_synonyms) OR FIND_IN_SET('$spemud_value', mapping_human.protein_numbers)");
+    $query_ids = mysqli_query($db_connection, "SELECT nc2.ncbi_gene_id AS human_gene_id, homology.mouse_gene_id, homology.worm_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN homology ON nc2.ncbi_gene_id = homology.human_gene_id  WHERE nc1.meta_value='Homo sapiens' AND nc2.meta_value='$spemud_value' LIMIT 1");
     if(mysqli_num_rows($query_ids) == 0){
         return null;
     }
