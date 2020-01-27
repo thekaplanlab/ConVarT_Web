@@ -98,12 +98,12 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 <div id="specieNames"></div>
             </section>
             <section id="GoToPosition">
-                Search # <input type="number" placeholder="Type a position" name="position"> Species:<select name="species"></select><br>
+                Search # <input type="number" placeholder="Type a position" name="position"> Species:<select name="species" id="speciesSelect"></select><br>
                 <script type="text/javascript">
                   function positionKeyUp(){
                       var position =$('input[name=position]').val();
                       var species = parseInt($('select[name=species]').val());
-                      console.log(species);
+                      // console.log(species);
                       var alignmentPosition = getAminoacidPositionInViewport(species, position-1);
                     
                       $('#position-number').remove();
@@ -266,7 +266,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
           var SpecieName = document.createElement("div");
           var SpecieNameLink = document.createElement("a");
           var prType = prName.substring(0, 2);
-          console.log('hey', prType);
+          // console.log('hey', prType);
           if (prType == "NP" || prType == "XP" ) {
           	SpecieNameLink.setAttribute("href", "https://www.ncbi.nlm.nih.gov/protein/" + prID);
           }
