@@ -34,6 +34,8 @@
 
     $transcriptIdMouse = getTranscriptIdByConvartGeneId($mouse_convart_id);
     $geneDetailsMouse = getGeneDetailsById($transcriptIdMouse);
+    $dbIds = explode(',', str_replace('"', '', $geneDetailsMouse['dbs']['OTHER']));
+    $enstIdMouse = end(array_filter($dbIds, function($x) {return strstr($x, 'ENS') !== FALSE; }));
 
     $transcriptIdWorm = getTranscriptIdByConvartGeneId($worm_convart_id);
     $geneDetailsWorm = getGeneDetailsById($transcriptIdWorm);
@@ -628,7 +630,7 @@
         "serverSide": false,
         "pageLength": 20,
         
-        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<?= urlencode($transcriptIdMouse); ?>",
+        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<?= urlencode($enstIdMouse); ?>",
         "columnDefs": [{
             "targets": 0,
             "render": function(data, type, row) {
