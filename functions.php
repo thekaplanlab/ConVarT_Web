@@ -59,23 +59,43 @@ function processMSA($row){
     
     $fasta = explode("\n>", trim($fasta));
     $homo = @end(array_filter($fasta, function($x){return strpos($x, 'Homo sapiens') !== false; }));
+    $mouse = @end(array_filter($fasta, function($x){return strpos($x, 'Mus musculus') !== false; }));
+    $worm = @end(array_filter($fasta, function($x){return strpos($x, 'Caenorhabditis elegans') !== false; }));
     
     $homoId = array_search($homo, $fasta);
+    $mouseId = array_search($mouse, $fasta);
+    $wormId = array_search($worm, $fasta);
+
     if($homoId != 0){
-        
         $fasta[$homoId] = $fasta[0];
         $fasta[0] = $homo;
-
+    }
+    if($mouseId != 0){
+        $fasta[$mouseId] = $fasta[1];
+        $fasta[1] = $mouse;
+    }
+    if($wormId != 0){
+        $fasta[$wormId] = $fasta[2];
+        $fasta[2] = $worm;
     }
 
     $fasta = '>'.trim(implode("\n>", $fasta));
     $fasta = preg_replace('@>{2,}@', '>', $fasta);
     
     preg_match('@^(.*?) @', $homo, $npId);
+    preg_match('@^(.*?) @', $mouse, $npMouseId);
+    preg_match('@^(.*?) @', $worm, $npWormId);
+
     $npId = $npId[1];
+    $npMouseId = $npMouseId[1];
+    $npWormId = $npWormId[1];
+
     $transcriptId = str_replace('>', '', trim($npId));
+    $transcriptMouseId = str_replace('>', '', trim($npMouseId));
+    $transcriptWormId = str_replace('>', '', trim($npWormId));
+
     return ['id'=>$row['id'], 'fasta'=>$fasta, 'human_transcript_id'=>$transcriptId,
-                'human_convart_gene_id'=> getConvartGeneIdByDbId($transcriptId)];
+                'human_convart_gene_id'=> getConvartGeneIdByDbId($transcriptId), 'mouse_transcript_id' => $transcriptMouseId, 'worm_transcript_id' => $transcriptWormId];
 }
 
 function getConvartGeneIdByDbId($transcriptId){
