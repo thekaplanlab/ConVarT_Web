@@ -628,7 +628,7 @@
         "serverSide": false,
         "pageLength": 20,
         
-        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<? urlencode($transcriptIdMouse); ?>",
+        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<?= urlencode($transcriptIdMouse); ?>",
         "columnDefs": [{
             "targets": 0,
             "render": function(data, type, row) {
