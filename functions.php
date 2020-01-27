@@ -442,7 +442,7 @@ function getMouseVariantsData($transcriptId){
     if($transcriptId == null)
         return null;
 
-    $query = mysqli_query($db_connection, "SELECT * FROM mouse_variants WHERE 'ensembl_transcript_id' = '$transcriptId' ORDER BY Position");
+    $query = mysqli_query($db_connection, "SELECT * FROM mouse_variants WHERE ensembl_transcript_id = '$transcriptId' ORDER BY Position");
     
     if(mysqli_num_rows($query) == 0)
         return null;
