@@ -122,8 +122,9 @@ function getTranscriptIdByConvartGeneId($convartGeneId){
 function getMSAByGeneId($convartGeneId, $withFasta= true){
     global $db_connection;
     $withoutVersion = explode('.', $convartGeneId)[0];
-    
+
     if($withFasta){
+
         $query = mysqli_query($db_connection, "SELECT id, fasta FROM msa AS m INNER JOIN msa_gene AS mg ON ".
                             "mg.msa_id = m.id LEFT JOIN convart_gene_to_db as gdb ON gdb.convart_gene_id=mg.convart_gene_id ".
                             "LEFT JOIN msa_best_combination as mb ON gdb.convart_gene_id=mb.convart_gene_id WHERE ".

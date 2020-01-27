@@ -103,7 +103,6 @@ header("Cache-Control: max-age=$seconds_to_cache");
                   function positionKeyUp(){
                       var position =$('input[name=position]').val();
                       var species = parseInt($('select[name=species]').val());
-                      // console.log(species);
                       var alignmentPosition = getAminoacidPositionInViewport(species, position-1);
                     
                       $('#position-number').remove();
