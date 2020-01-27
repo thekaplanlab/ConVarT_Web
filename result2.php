@@ -19,6 +19,8 @@
 
     #Get MSA
     mysqli_query($db_connection, "SET profiling = 1;");
+    #echo $str_convart_ids;
+    
     $msaIdQuery = mysqli_query($db_connection, "SELECT GROUP_CONCAT(convart_gene_id) AS ids, msa_id FROM msa_gene GROUP BY msa_id HAVING ids = '$str_convart_ids' LIMIT 1");
     if (mysqli_num_rows($msaIdQuery) == 0) {
         # Burayı sonra düzenle!!
@@ -513,19 +515,21 @@
     $('select').material_select();
     var event = new Event('mouseover');
 
-    function goToVariation(position) {
+    function goToVariation(protein, position) {
     	$('#PopUpTool').modal('open');
         var iframe = document.getElementById("CurrentProjectTool");
         iframe.scrollIntoViewIfNeeded();
 
         var iframeWindow = iframe.contentWindow;
         var iframeDocument = iframe.contentDocument;
-        var viewportPosition = iframeWindow.getAminoacidPositionInViewport(0, position-1);
+        var viewportPosition = iframeWindow.getAminoacidPositionInViewport(protein, position-1);
         //$(iframeDocument).find('#CurrentProjectTool').scrollLeft(viewportPosition*20 - iframe.clientWidth/2);
         $(iframeDocument).find('input[name=position]').val(position);
+        iframe.contentWindow.document.getElementById("speciesSelect").selectedIndex = protein;
+        // $(iframeDocument).find("speciesSelect").selectedIndex = protein;
         iframeWindow.positionKeyUp();
         setTimeout(function(){
-            iframeWindow.ClinVarInfo(0, position-1);
+            iframeWindow.ClinVarInfo(protein, position-1);
         }, 125);
     }
 </script>
@@ -556,7 +560,7 @@
                 "render": function(data, type, row) {
                     var position = data.split('---')[1];
                     data = data.split('---')[0]; 
-                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation(0, '+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             },{
@@ -611,7 +615,7 @@
                 "render": function(data, type, row) {
                     var position = data.split('---')[1];
                     data = data.split('---')[0]; 
-                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation(0, '+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             } ], 
@@ -645,7 +649,7 @@
         }, {
             "targets": 5,
             "render": function(data, type, row) {
-                return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+                return '<a class="variation-link" onclick="goToVariation(1, '+data+')">'+data+'</a>';
             },
             "defaultContent": "<button>Click!</button>"
         } ], 
@@ -669,7 +673,7 @@
             "columnDefs": [{
                 "targets": 3,
                 "render": function(data, type, row) {
-                    return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation(0, '+data+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             }], 
@@ -704,7 +708,7 @@
                 "render": function(data, type, row) {
                     var position = data.split('---')[1];
                     data = data.split('---')[0].split(":")[1]; 
-                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation(0, '+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             }], 
@@ -749,7 +753,7 @@
                 "render": function(data, type, row) {
                     var position = data.split('---')[1];
                     data = data.split('---')[0]; 
-                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation(0, '+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             },{
