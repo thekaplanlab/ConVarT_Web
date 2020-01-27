@@ -19,10 +19,13 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
     $msa = getMSAById($msaId);
     $fasta = $msa['fasta'];
-
+    $mouse_transcript_id = $msa['mouse_transcript_id'];
+    $worm_transcript_id = $msa['worm_transcript_id'];
+    
     $domainsResult="";
     
-      
+
+
       #Gene Info
       $geneInfoHuman = getGeneDetailsById($msa['human_transcript_id']);
       $geneId = $geneInfoHuman['dbs']['NCBI'];
@@ -383,7 +386,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
         <?php endwhile; ?>
         <?php endif; ?>   
 
-        /* List the dbSNP Data */
+      /* List the dbSNP Data */
  		<?php
         if(isset($geneInfoHuman['dbs']['ENST'])):
             $dbSNPQuery = getdbSNPData($geneInfoHuman['dbs']['ENST'], 'Feature', 'Protein_position, HGVSp, Impact, Consequence');
@@ -400,6 +403,20 @@ header("Cache-Control: max-age=$seconds_to_cache");
             ClinVar(0, <?php echo $position; ?>, '<?php echo $dbSNPnote; ?>', 'dbSNP');
         <?php endwhile; ?>
         <?php endif; ?>  
+
+      /* List the Mouse Variants */
+      <?php
+        $mouseQuery = getMouseVariantsData($mouse_transcript_id);
+
+        while ($row = @mysqli_fetch_array($mouseQuery)):
+        $position=$row['Position'];
+        if ($position == "" || $position == NULL) {
+        $position  = 0;
+        }
+        $mouseNote = 'Mutation: '.$row['aa_change'].'at' .$position. '<br> Mutation Type: '.$row['mutation_type'] .'<br>Note:'.$row['pred_text'];
+        ?>
+        ClinVar(1, <?php echo $position; ?>, '<?php echo $mouseNote; ?>', 'Mouse Variant');
+      <?php endwhile; ?>
 
     }
 
