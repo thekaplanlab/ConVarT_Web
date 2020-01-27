@@ -413,7 +413,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
         if ($position == "" || $position == NULL) {
         $position  = 0;
         }
-        $mouseNote = 'Mutation: '.$row['aa_change'].'at' .$position. '<br> Mutation Type: '.$row['mutation_type'] .'<br>Note:'.$row['pred_text'];
+        $mouseNote = 'Mutation: '.$row['aa_change'].' at ' .$position. '<br> Mutation Type: '.$row['mutation_type'] .'<br>Note:'.$row['pred_text'];
         ?>
         ClinVar(1, <?php echo $position; ?>, '<?php echo $mouseNote; ?>', 'Mouse Variant');
       <?php endwhile; ?>
