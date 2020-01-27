@@ -22,8 +22,7 @@
     $msaIdQuery = mysqli_query($db_connection, "SELECT GROUP_CONCAT(convart_gene_id) AS ids, msa_id FROM msa_gene GROUP BY msa_id HAVING ids = '$str_convart_ids' LIMIT 1");
     if (mysqli_num_rows($msaIdQuery) == 0) {
         # Burayı sonra düzenle!!
-        echo "NO MSA!";
-        //header("Location: index.php?err=no_result");
+        echo '<div class="center-align card-panel blue "> <span class="white-text">The MSA could not be found! </span><br> <br><a href="http://convart.org" class="btn white blue-text">Go Back to Search Page</a> </div>';
         exit();
     }
     $msa_id = (int) mysqli_fetch_assoc($msaIdQuery)["msa_id"];
