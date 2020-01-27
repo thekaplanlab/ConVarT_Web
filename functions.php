@@ -437,6 +437,20 @@ function getPtmData($transcriptId, $column='acc_id', $cols='*'){
     return $query;
 }
 
+function getMouseVariantsData($transcriptId){
+    global $db_connection;
+    if($transcriptId == null)
+        return null;
+
+    $query = mysqli_query($db_connection, "SELECT * FROM mouse_variants WHERE 'ensembl_transcript_id' = '$transcriptId' ORDER BY Position");
+    
+    if(mysqli_num_rows($query) == 0)
+        return null;
+
+    return $query;
+}
+
+
 function getCosmicData($transcriptId, $column='accession_number', $cols='*'){
     global $db_connection;
 
