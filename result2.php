@@ -144,7 +144,7 @@
 <div class="col s12 m12 l12">     
     <div class="collapsible-header active"><i class="material-icons">format_align_center</i>ConVarT</div>
         <div class="collapsible-body"> 
-            <iframe id="CurrentProjectTool2" src="show.php?msa_id=<?= $msa_id; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
+            <iframe id="CurrentProjectTool2" src="tool.php?msa_id=<?= $msa_id; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
             <p>
                 +Please click the name of species for the protein accession number used in the alignment. 
                 <br>+A <span class="red-text">* (asterisk)</span> used as a pointer to positions of post translational modifications in human.
@@ -360,6 +360,29 @@
         </div><br>
     </div>
 
+    <!-- Mouse Variants table -->
+    <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">healing</i>Mouse Variants</div>
+        <div class="collapsible-body">
+            <div id="mouseVariants_chart"></div>
+            <div class="table-wrapper"><table id="mouseVariantsTable" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene ID <i class="material-icons right">filter_list</i></th>
+                        <th>Gene Symbol <i class="material-icons right">filter_list</i></th>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>Alteration <i class="material-icons right">filter_list</i></th>
+                        <th>Type <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>
+
     <!-- Domains Table -->
     <div class="col s12 m12 l12">
         <div class="collapsible-header active"><i class="material-icons">format_align_center</i>Protein Domains (PFAM)</div>
@@ -560,6 +583,7 @@
         <?php else: ?>
         $('#ClinVarTable').parent().parent().parent().hide();
         <?php endif; ?>
+        
         //gnomAD Table
         $('#gnomADtable').DataTable( {
             "processing": false,
@@ -597,6 +621,40 @@
             }
         } );
         $('#gnomADtable').removeClass('hide');
+
+        //Mouse Variants Table
+        $('#mouseVariantsTable').DataTable( {
+        "processing": false,
+        "serverSide": false,
+        "pageLength": 20,
+        
+        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<? urlencode($transcriptIdMouse); ?>",
+        "columnDefs": [{
+            "targets": 0,
+            "render": function(data, type, row) {
+                return '<a class="variation-link" target="_blank" href="https://www.ensembl.org/id/'+data+'">'+data+'</a>';
+            },
+            "defaultContent": "<button>Click!</button>"
+        },{
+            "targets": 2,
+            "render": function(data, type, row) {
+                return '<a class="variation-link" target="_blank" href="https://www.ensembl.org/id/'+data+'">'+data+'</a>';
+            },
+            "defaultContent": "<button>Click!</button>"
+        }, {
+            "targets": 5,
+            "render": function(data, type, row) {
+                return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+            },
+            "defaultContent": "<button>Click!</button>"
+        } ], 
+        "deferRender": true,
+        language: {
+            searchPlaceholder: "Search in the table",
+            search: ""
+        }
+    } );
+    $('#mouseVariantsTable').removeClass('hide');
         
         <?php if(array_sum($ptmCounts) > 0): ?>
         //PTM Table
