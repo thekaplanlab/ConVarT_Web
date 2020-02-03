@@ -125,6 +125,24 @@
         $cosmicCounts = getCosmicStats(@$humanGeneDetails['dbs']['ENST']);
     } else {$cosmicCounts = [];}
 
+    if(! empty($clinVarCounts)){
+        $dynamicChartTitle = 'ClinVar Pathogenicity of Variations';
+        $dynamicChart = 'clinvar';
+    } elseif(! empty($ptmCounts)){
+        $dynamicChartTitle = 'Post translational modifications (PTM) by Type';
+        $dynamicChart = 'ptm';
+    } elseif(! empty($gnomADCounts)){
+        $dynamicChartTitle = 'gnomAD Variants By Annotation';
+        $dynamicChart = 'gnomad';
+    }  elseif(! empty($cosmicCounts)){
+        $dynamicChartTitle = 'COSMIC Variants By Annotation';
+        $dynamicChart = 'cosmic';
+    }  elseif(! empty($dbSNPCounts)){
+        $dynamicChartTitle = 'dbSNP Variants By Annotation';
+        $dynamicChart = 'dbSNP';
+    }
+
+
 
     #Disease Finder
 
@@ -140,30 +158,12 @@
 }
 ?>
 
-
-<!-- Current Project | Tables and Other Components -->
-<div class="row TablesContainer">
-<!-- Current Project Tool  -->
-<div class="col s12 m12 l12">     
-    <div class="collapsible-header active"><i class="material-icons">format_align_center</i>ConVarT</div>
-        <div class="collapsible-body"> 
-            <iframe id="CurrentProjectTool2" src="tool.php?msa_id=<?= $msa_id; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
-            <p>
-                +Please click the name of species for the protein accession number used in the alignment. 
-                <br>+A <span class="red-text">* (asterisk)</span> used as a pointer to positions of post translational modifications in human.
-                <br>+Protein domains illustrated above belong to <i>Homo sapiens</i> (Human).
-                <br>+ClinVar stacked bar chart represents whole protein isoforms of the gene. Please, check the other protein isoforms of the gene:
-                <br>
-            </p>
-        </div>
-    <br> </div>
-<!-- Gene Info --->    
-    <div class="col s12 m12 l12">     
-    <div class="collapsible-header active"><i class="material-icons">info</i>Gene Info</div>
-    <div class="collapsible-body"> 
+<!-- Gene Info and Tool --->
+<div class="pageBox white z-depth-2">
+    <div class="row resultGeneBox">
         <!-- Current Project | Result Box - Gene Card -->
-          
-        <div class="result_title blue_color"><i><?= $geneDetails['gene_symbol'] ? printify($geneDetails['gene_symbol']): $transcriptId; ?></i> (GeneID: <?= $geneId; ?>) | <?= ucfirst($geneDetails['species_id']);?></div>
+        <div class="col s12 m12 l6">
+            <div class="result_title blue_color"><i><?= $geneDetails['gene_symbol'] ? printify($geneDetails['gene_symbol']): $transcriptId; ?></i> (GeneID: <?= $geneId; ?>) | <?= ucfirst($geneDetails['species_id']);?></div>
             <table class="gene_info_table">
                 <?php if(isset($geneDetails['gene_description'])): ?>
                 <tr>
@@ -187,44 +187,81 @@
                 		<?php if(array_sum($dbSNPCounts) > 0):?> dbSNP(<b><?= array_sum($dbSNPCounts); ?></b>)<?php endif;?>
                 		<?php if(array_sum($ptmCounts) > 0):?> PTM(<b><?= array_sum($ptmCounts); ?></b>)<?php endif;?>
                 	</td>
-                </tr>   
-            </table>   
-            <div class="result_title blue_color"><i><?= $geneDetailsMouse['gene_symbol'] ? printify($geneDetailsMouse['gene_symbol']): $transcriptIdMouse; ?></i> (GeneID: <?= $geneIdMouse; ?>) | <?= ucfirst($geneDetailsMouse['species_id']);?></div>
-            <table class="gene_info_table">
-                <?php if(isset($geneDetailsMouse['gene_description'])): ?>
-                <tr>
-                        <td><b>Description:</b></td><td><?= printify($geneDetailsMouse['gene_description']); ?></td>
-                    </tr>
-                <?php endif;?>
-                <tr>
-                    <td><b>Synonyms:</b></td><td><i> <?= printify($geneDetailsMouse['gene_synonym']); ?></i></td>
                 </tr>
-                <tr>
-                    <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsMouse['other_id']); ?></td>
-                </tr>
-                <tr>
-                    <td><b>Protein Accession Numbers:</b></td><td><?= linkify(@$geneDetailsMouse['protein_number']); ?></td>
-                </tr>
-            </table>   
-            <div class="result_title blue_color"><i><?= $geneDetailsWorm['gene_symbol'] ? printify($geneDetailsWorm['gene_symbol']): $transcriptIdWorm; ?></i> (GeneID: <?= $geneIdWorm; ?>) | <?= ucfirst($geneDetailsWorm['species_id']);?></div>
-            <table class="gene_info_table">
-                <?php if(isset($geneDetailsWorm['gene_description'])): ?>
-                <tr>
-                        <td><b>Description:</b></td><td><?= printify($geneDetailsWorm['gene_description']); ?></td>
-                    </tr>
-                <?php endif;?>
-                <tr>
-                    <td><b>Synonyms:</b></td><td><i> <?= printify($geneDetailsWorm['gene_synonym']); ?></i></td>
-                </tr>
-                <tr>
-                    <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsWorm['other_id']); ?></td>
-                </tr>
-                <tr>
-                    <td><b>Protein Accession Numbers:</b></td><td><?= linkify(@$geneDetailsWorm['protein_number']); ?></td>
-                </tr>
+      
             </table>
         </div>
-        <br></div>
+        <!-- Current Project | Statistics -->
+        <div class="col s12 m12 l6">
+        <div class="result_title blue_color">            
+           <b ><?= $dynamicChartTitle; ?></b> 
+           <?php if($dynamicChart == 'clinvar'): ?>
+           <a href="#clinical_significance_classification_help" class="modal-trigger tooltipped" data-position="right" data-delay="10" data-tooltip="Classification of Clinicial Significance of ClinVar Data"><i class="material-icons blue-text text-darken-1">help</i></a>  
+       <?php endif; ?>
+       </div>
+        <div id="dynamic_chart"></div>
+        </div>
+    </div> <!-- end of gene card -->
+
+        <!-- Current Project Tool  -->
+        <iframe id="CurrentProjectTool2" src="<?= $GLOBALS['base_url'];?>tool.php?msa_id=<?= $msa['id']; ?>" width="96%" style="min-height:390px; height:auto !important" frameborder="0"></iframe>
+        <p>
+            +Please click the name of species for the protein accession number used in the alignment. 
+            <br>+A <span class="red-text">* (asterisk)</span> used as a pointer to positions of post translational modifications in human.
+            <br>+Protein domains illustrated above belong to <i>Homo sapiens</i> (Human).
+            <br>+ClinVar stacked bar chart represents whole protein isoforms of the gene. Please, check the other protein isoforms of the gene:
+            <br>
+        </p>
+    </div> <!-- end of row and resultGeneBox -->
+
+</div> <!-- end of pageBox -->
+    
+<br>
+
+<!-- Current Project | Tables and Other Components -->
+<div class="row TablesContainer">
+
+<!-- Gene Info --->    
+    <div class="col s12 m12 l12">     
+    <div class="collapsible-header active"><i class="material-icons">info</i>Gene Info for Model Organisms</div>
+    <div class="collapsible-body"> 
+        <!-- Current Project | Result Box - Gene Card -->
+        <div class="result_title blue_color"><i><?= $geneDetailsMouse['gene_symbol'] ? printify($geneDetailsMouse['gene_symbol']): $transcriptIdMouse; ?></i> (GeneID: <?= $geneIdMouse; ?>) | <?= ucfirst($geneDetailsMouse['species_id']);?></div>
+        <table class="gene_info_table">
+            <?php if(isset($geneDetailsMouse['gene_description'])): ?>
+            <tr>
+                    <td><b>Description:</b></td><td><?= printify($geneDetailsMouse['gene_description']); ?></td>
+                </tr>
+            <?php endif;?>
+            <tr>
+                <td><b>Synonyms:</b></td><td><i> <?= printify($geneDetailsMouse['gene_synonym']); ?></i></td>
+            </tr>
+            <tr>
+                <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsMouse['other_id']); ?></td>
+            </tr>
+            <tr>
+                <td><b>Protein Accession Numbers:</b></td><td><?= linkify(@$geneDetailsMouse['protein_number']); ?></td>
+            </tr>
+        </table>   
+        <div class="result_title blue_color"><i><?= $geneDetailsWorm['gene_symbol'] ? printify($geneDetailsWorm['gene_symbol']): $transcriptIdWorm; ?></i> (GeneID: <?= $geneIdWorm; ?>) | <?= ucfirst($geneDetailsWorm['species_id']);?></div>
+        <table class="gene_info_table">
+            <?php if(isset($geneDetailsWorm['gene_description'])): ?>
+            <tr>
+                    <td><b>Description:</b></td><td><?= printify($geneDetailsWorm['gene_description']); ?></td>
+                </tr>
+            <?php endif;?>
+            <tr>
+                <td><b>Synonyms:</b></td><td><i> <?= printify($geneDetailsWorm['gene_synonym']); ?></i></td>
+            </tr>
+            <tr>
+                <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsWorm['other_id']); ?></td>
+            </tr>
+            <tr>
+                <td><b>Protein Accession Numbers:</b></td><td><?= linkify(@$geneDetailsWorm['protein_number']); ?></td>
+            </tr>
+        </table>
+    </div>
+    <br></div>
 
     <!-- ClinVar Table -->
     <div class="col s12 m12 l12">
@@ -706,8 +743,8 @@
             },{
                 "targets": 3,
                 "render": function(data, type, row) {
-                    var position = data.split('---')[1];
-                    data = data.split('---')[0].split(":")[1]; 
+                    var position = data.split('---')[0];
+                    data = data.split('---')[1].split(":")[1]; 
                     return '<a class="variation-link" onclick="goToVariation(0, '+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
