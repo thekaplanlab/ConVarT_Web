@@ -400,6 +400,69 @@
         </div><br>
     </div>
 
+   <!-- Tubulin Mutations for Human table -->
+   <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">blur_circular</i>Tubulin Mutation Collection for Human</div>
+        <div class="collapsible-body">
+            <div class="table-wrapper"><table id="tubulinTableHuman" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene<i class="material-icons right">filter_list</i></th>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Phenotype <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>  
+
+   <!-- Tubulin Mutations for Mouse table -->
+   <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">blur_circular</i>Tubulin Mutation Collection for Mouse</div>
+        <div class="collapsible-body">
+            <div class="table-wrapper"><table id="tubulinTableMouse" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene<i class="material-icons right">filter_list</i></th>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Phenotype <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>  
+
+   <!-- Tubulin Mutations for Worm table -->
+   <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">blur_circular</i>Tubulin Mutation Collection for Worm</div>
+        <div class="collapsible-body">
+            <div class="table-wrapper"><table id="tubulinTableWorm" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene<i class="material-icons right">filter_list</i></th>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Phenotype <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>  
+
     <!-- Mouse Variants table -->
     <div class="col s12 m12 l12">
         <div class="collapsible-header active"><i class="material-icons">healing</i>Mouse Variants</div>
@@ -663,6 +726,71 @@
             }
         } );
         $('#gnomADtable').removeClass('hide');
+
+        //Tubulin Mutation Collection Human Table
+        $('#tubulinTableHuman').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+            <?php if(isset($humanGeneDetails['dbs']['NP'])): ?>
+            "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=tubulin&id=<?= urlencode(normalizeIds($humanGeneDetails['dbs']['NP'])); ?>",
+            <?php endif; ?>
+            "columnDefs": [{
+                "targets": 3,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" onclick="goToVariation(0, '+data+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#tubulinTableHuman').removeClass('hide');
+
+        //Tubulin Mutation Collection Mouse Table
+        $('#tubulinTableMouse').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+            "ajax": '<?= $GLOBALS["base_url"]; ?>/api.php?action=tubulin&id="<?= urlencode(normalizeIds($transcriptIdMouse)); ?>"',
+            "columnDefs": [{
+                "targets": 3,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" onclick="goToVariation(1, '+data+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#tubulinTableMouse').removeClass('hide');
+
+        //Tubulin Mutation Collection Worm Table
+        $('#tubulinTableWorm').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+            "ajax": '<?= $GLOBALS["base_url"]; ?>/api.php?action=tubulin&id="<?= urlencode(normalizeIds($transcriptIdWorm)); ?>"',
+            "columnDefs": [{
+                "targets": 3,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" onclick="goToVariation(2, '+data+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#tubulinTableWorm').removeClass('hide');
 
         //Mouse Variants Table
         $('#mouseVariantsTable').DataTable( {
