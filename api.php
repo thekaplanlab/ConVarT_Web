@@ -173,6 +173,46 @@ switch ($_GET['action']) {
         }
         break;
 
+    // case 'tubulin':
+    //     $tubulinQuery = getTubulinData($id);
+    //     $data = [];
+
+    //     while($row = mysqli_fetch_assoc($tubulinQuery)){
+    //         $data[] = [
+    //             $row['gene_tag'],
+    //             $row['transcript'],
+    //             $row['aa_change'],
+    //             $row['position'],
+    //             $row['phenotype']
+    //         ];
+    //     }
+    //     break;
+
+    case 'tubulin':
+        $alreadyLookedIds = [];
+        $ids = explode(',', $id);
+        $data = [];
+
+        foreach($ids as $id){
+            if(isset($alreadyLookedIds[$id]))
+               continue;
+            else
+               $alreadyLookedIds[$id] = true;
+
+            $tubulinQuery = getTubulinData($id);
+
+            while($row = @mysqli_fetch_assoc($tubulinQuery)){
+                $data[] = [
+                    $row['gene_tag'],
+                    $row['transcript'],
+                    $row['aa_change'],
+                    $row['position'],
+                    $row['phenotype']
+                ];
+            }
+        }
+        break;
+
     case 'cosmic':
        
         $data = [];

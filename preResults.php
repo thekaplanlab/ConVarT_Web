@@ -53,7 +53,7 @@
             exit;
         }
         
-        $proteinsBySpecies = searchProteinNumbers($searchText);
+        $proteinsBySpecies = searchProteinNumbers($searchText, "2020-02-01");
         
         #$countForHuman = mysqli_num_rows($queryForHuman);
         #if($countForHuman == 0) {$preResultForHuman='<a href="#" class="btn waves-effect waves-light preResultBtnEmpty">No finding for "'.$searchText.'"</a>';}

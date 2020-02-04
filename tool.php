@@ -385,7 +385,24 @@ header("Cache-Control: max-age=$seconds_to_cache");
         <?php endwhile; ?>
         <?php endif; ?>   
 
-      /* List the dbSNP Data */
+    /* List the Tubulin Human Data */
+    <?php
+        if(isset($geneInfoHuman['dbs']['NP'])):
+            $tubulinHumanQuery = getTubulinData($geneInfoHuman['dbs']['NP']);
+
+            while ($row = @mysqli_fetch_array($tubulinHumanQuery)):
+                $position=$row['position'];
+                if ($position == "" || $position == NULL) {
+                	$position  = 0;
+                }
+                $proteinChange = $row['aa_change'];
+                $Tubulinnote = 'Mutation: '.$proteinChange.'<br>Phenotype: '.$row['phenotype'].'<br>';
+        ?>
+            ClinVar(0, <?php echo $position; ?>, '<?php echo $Tubulinnote; ?>', 'Tubulin Mutations');
+        <?php endwhile; ?>
+        <?php endif; ?>  
+
+    /* List the dbSNP Data */
  		<?php
         if(isset($geneInfoHuman['dbs']['ENST'])):
             $dbSNPQuery = getdbSNPData($geneInfoHuman['dbs']['ENST'], 'Feature', 'Protein_position, HGVSp, Impact, Consequence');

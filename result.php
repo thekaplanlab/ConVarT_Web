@@ -367,6 +367,27 @@
         </div><br>
     </div>
 
+    <!-- Tubulin Mutations table -->
+    <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">blur_circular</i>Tubulin Mutation Collection</div>
+        <div class="collapsible-body">
+            <div class="table-wrapper"><table id="tubulinTable" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene<i class="material-icons right">filter_list</i></th>
+                        <th>Transcript ID <i class="material-icons right">filter_list</i></th>
+                        <th>Consequence <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Phenotype <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>    
+
     <!-- Domains Table -->
     <div class="col s12 m12 l12">
         <div class="collapsible-header active"><i class="material-icons">format_align_center</i>Protein Domains (PFAM)</div>
@@ -596,7 +617,7 @@
                     return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
-            } ], 
+            }], 
             "deferRender": true,
             language: {
                 searchPlaceholder: "Search in the table",
@@ -620,7 +641,7 @@
                     return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
-            }], 
+            } ],
             "deferRender": true,
             language: {
                 searchPlaceholder: "Search in the table",
@@ -650,9 +671,9 @@
             },{
                 "targets": 3,
                 "render": function(data, type, row) {
-                    var position = data.split('---')[1];
+                    var position = data.split('---')[0];
                     data = data.split('---')[0].split(":")[1]; 
-                    return '<a class="variation-link" onclick="goToVariation('+position+')">'+data+'</a>';
+                    return '<a class="variation-link" onclick="goToVariation('+data+')">'+position+'</a>';
                 },
                 "defaultContent": "<button>Click!</button>"
             }], 
@@ -666,6 +687,29 @@
         <?php else: ?>
         $('#dbSNPTable').parent().parent().parent().hide();
         <?php endif; ?>
+        
+        //Tubulin Mutation Collection Table
+        $('#tubulinTable').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+            <?php if(isset($humanGeneDetails['dbs']['NP'])): ?>
+            "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=tubulin&id=<?= urlencode(normalizeIds($humanGeneDetails['dbs']['NP'])); ?>",
+            <?php endif; ?>
+            "columnDefs": [{
+                "targets": 3,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" onclick="goToVariation('+data+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#tubulinTable').removeClass('hide');
 
         <?php if(array_sum($cosmicCounts) > 0): ?>
         //COSMIC Table

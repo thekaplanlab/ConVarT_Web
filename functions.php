@@ -480,6 +480,19 @@ function getdbSNPData($transcriptId, $column='Feature', $cols='*'){
     return $query;
 }
 
+function getTubulinData($transcriptId){
+    global $db_connection;
+
+    if($transcriptId == null)
+        return null;
+
+    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript IN ({$transcriptId}) ORDER BY position DESC");
+    
+    if(mysqli_num_rows($query) == 0)
+        return null;
+
+    return $query;
+}
 
 function searchProteinNumbers($value){
     global $db_connection;
@@ -590,8 +603,7 @@ function getGeneByRSNumber($rs_number) {
 
 }
 
-function getGnomADData($transcriptId, $column='canonical_transcript', 
-                $cols='*'){
+function getGnomADData($transcriptId, $column='canonical_transcript', $cols='*'){
     global $db_connection;
     $query = mysqli_query($db_connection, "SELECT {$cols} FROM gnomad WHERE gnomad.{$column} IN ({$transcriptId}) AND position > 0 ORDER BY position");    
 
