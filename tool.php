@@ -434,7 +434,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
           $proteinChange = $row['aa_change'];
           $Tubulinnote = 'Mutation: '.$proteinChange.'<br>Phenotype: '.$row['phenotype'].'<br>';
         ?>
-            ClinVar(1, <?php echo $position; ?>, '<?php echo $Tubulinnote; ?>', 'Tubulin Mutations');
+            ClinVar(2, <?php echo $position; ?>, '<?php echo $Tubulinnote; ?>', 'Tubulin Mutations');
         <?php endwhile; ?>
         <?php endif; ?>  
 
