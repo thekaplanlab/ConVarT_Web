@@ -493,6 +493,19 @@ function getTubulinData($transcriptId){
 
     return $query;
 }
+function getTubulinDataNonHuman($transcriptId){
+    global $db_connection;
+
+    if($transcriptId == null)
+        return null;
+
+    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript = '$transcriptId' ORDER BY position DESC");
+    
+    if(mysqli_num_rows($query) == 0)
+        return null;
+
+    return $query;
+}
 
 function searchProteinNumbers($value){
     global $db_connection;

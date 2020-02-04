@@ -402,6 +402,42 @@ header("Cache-Control: max-age=$seconds_to_cache");
         <?php endwhile; ?>
         <?php endif; ?>  
 
+    /* List the Tubulin Mouse Data */
+    <?php
+
+      $mouse_transcript_id_woDot = explode(".", $mouse_transcript_id)[0];
+      $tubulinMouseQuery = getTubulinDataNonHuman($mouse_transcript_id_woDot);
+      if(isset($geneInfoHuman['dbs']['NP'])):
+      while ($row = @mysqli_fetch_array($tubulinMouseQuery)):
+          $position=$row['position'];
+          if ($position == "" || $position == NULL) {
+            $position  = 0;
+          }
+          $proteinChange = $row['aa_change'];
+          $Tubulinnote = 'Mutation: '.$proteinChange.'<br>Phenotype: '.$row['phenotype'].'<br>';
+        ?>
+            ClinVar(1, <?php echo $position; ?>, '<?php echo $Tubulinnote; ?>', 'Tubulin Mutations');
+        <?php endwhile; ?>
+        <?php endif; ?>  
+
+    /* List the Tubulin Worm Data */
+    <?php
+
+      $worm_transcript_id_woDot = explode(".", $worm_transcript_id)[0];
+      $tubulinWormQuery = getTubulinDataNonHuman($worm_transcript_id_woDot);
+      if(isset($geneInfoHuman['dbs']['NP'])):
+      while ($row = @mysqli_fetch_array($tubulinWormQuery)):
+          $position=$row['position'];
+          if ($position == "" || $position == NULL) {
+            $position  = 0;
+          }
+          $proteinChange = $row['aa_change'];
+          $Tubulinnote = 'Mutation: '.$proteinChange.'<br>Phenotype: '.$row['phenotype'].'<br>';
+        ?>
+            ClinVar(1, <?php echo $position; ?>, '<?php echo $Tubulinnote; ?>', 'Tubulin Mutations');
+        <?php endwhile; ?>
+        <?php endif; ?>  
+
     /* List the dbSNP Data */
  		<?php
         if(isset($geneInfoHuman['dbs']['ENST'])):
