@@ -486,7 +486,7 @@ function getTubulinData($transcriptId){
     if($transcriptId == null)
         return null;
 
-    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript IN ({$transcriptId}) ORDER BY position DESC");
+    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript IN ({$transcriptId}) ORDER BY position");
     
     if(mysqli_num_rows($query) == 0)
         return null;
@@ -499,7 +499,7 @@ function getTubulinDataNonHuman($transcriptId){
     if($transcriptId == null)
         return null;
 
-    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript = '$transcriptId' ORDER BY position DESC");
+    $query = mysqli_query($db_connection, "SELECT * FROM tubulin_mutations WHERE transcript = '$transcriptId' ORDER BY position");
     
     if(mysqli_num_rows($query) == 0)
         return null;
