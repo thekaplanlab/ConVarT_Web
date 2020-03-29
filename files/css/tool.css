@@ -26,7 +26,7 @@
 /* Reset CSS */
 html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,abbr, address, cite, code,del, dfn, em, img, ins, kbd, q, samp,small, strong, sub, sup, var,b, i,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, figcaption, figure,footer, header, hgroup, menu, nav, section, summary,time, mark, audio, video {margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;}body {line-height:1;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {display:block;}nav ul {list-style:none;}blockquote, q {quotes:none;}blockquote:before, blockquote:after,q:before, q:after {content:'';content:none;}a {margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;}/* change colours to suit your needs */ins {background-color:#ff9;color:#000;text-decoration:none;}/* change colours to suit your needs */mark {background-color:#ff9;color:#000;font-style:italic;font-weight:bold;}del {text-decoration: line-through;}abbr[title], dfn[title] {border-bottom:1px dotted;cursor:help;}table {border-collapse:collapse;border-spacing:0;}/* change border colour to suit your needs */hr {display:block;height:1px;border:0;border-top:1px solid #cccccc;margin:1em 0;padding:0;}input, select {vertical-align:middle;}
 
-#CurrentProjectTool {
+.msa-container {
   width: 100%;
   height: auto;
   min-height: 313px;
@@ -34,7 +34,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   overflow-y: hidden; 
 }
 
-#prLength {
+.protein-length {
   position: relative;
   margin: 70px 0;
   height: 10px;
@@ -82,31 +82,31 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   z-index: -1;
 } */
 
-#prLength a:nth-child(1) .domain {background: #4285F4; border-bottom-right-radius: 50px; border-top-right-radius: 50px; }
-#prLength a:nth-child(2) .domain {background: #EA4335; border-radius: 20px;}
-#prLength a:nth-child(3) .domain {background: #FBBC05; border-bottom-left-radius: 20px; border-top-right-radius: 20px; }
-#prLength a:nth-child(4) .domain {background: #34A853; border-radius: 0px; }
-#prLength a:nth-child(5) .domain {background: #7B0099; border-top-left-radius: 20px; border-bottom-right-radius: 20px; }
-#prLength a:nth-child(6) .domain {background: #004883; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
-#prLength a:nth-child(7) .domain {background: #FF5722; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
-#prLength a:nth-child(8) .domain {background: #4285F4; border-bottom-right-radius: 50px; border-top-right-radius: 50px; }
-#prLength a:nth-child(9) .domain {background: #EA4335; border-radius: 20px;}
-#prLength a:nth-child(10) .domain {background: #34A853; border-radius: 0px; }
-#prLength a:nth-child(11) .domain {background: #FBBC05; border-bottom-left-radius: 20px; border-top-right-radius: 20px; }
-#prLength a:nth-child(12) .domain {background: #7B0099; border-top-left-radius: 20px; border-bottom-right-radius: 20px; }
-#prLength a:nth-child(13) .domain {background: #004883; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
-#prLength a:nth-child(14) .domain {background: #FF5722; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
+.protein-length a:nth-child(1) .domain {background: #4285F4; border-bottom-right-radius: 50px; border-top-right-radius: 50px; }
+.protein-length a:nth-child(2) .domain {background: #EA4335; border-radius: 20px;}
+.protein-length a:nth-child(3) .domain {background: #FBBC05; border-bottom-left-radius: 20px; border-top-right-radius: 20px; }
+.protein-length a:nth-child(4) .domain {background: #34A853; border-radius: 0px; }
+.protein-length a:nth-child(5) .domain {background: #7B0099; border-top-left-radius: 20px; border-bottom-right-radius: 20px; }
+.protein-length a:nth-child(6) .domain {background: #004883; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
+.protein-length a:nth-child(7) .domain {background: #FF5722; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
+.protein-length a:nth-child(8) .domain {background: #4285F4; border-bottom-right-radius: 50px; border-top-right-radius: 50px; }
+.protein-length a:nth-child(9) .domain {background: #EA4335; border-radius: 20px;}
+.protein-length a:nth-child(10) .domain {background: #34A853; border-radius: 0px; }
+.protein-length a:nth-child(11) .domain {background: #FBBC05; border-bottom-left-radius: 20px; border-top-right-radius: 20px; }
+.protein-length a:nth-child(12) .domain {background: #7B0099; border-top-left-radius: 20px; border-bottom-right-radius: 20px; }
+.protein-length a:nth-child(13) .domain {background: #004883; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
+.protein-length a:nth-child(14) .domain {background: #FF5722; border-bottom-left-radius: 20px; border-top-left-radius: 20px; }
 
 .domain > a, a:link, a:visited, a:hover, a:focus {text-decoration:none; font-size:20px; color:#FFF; }
 
 #domain_sp {position:absolute; left:5px}
 #domain_ep {position:absolute; right:5px;}
 
-#sequence {position: relative; }
+.msa-container .sequence-container {position: relative; }
 
-#sequence section /* or .protein */ { display: flex; flex-flow: row nowrap; }
+.msa-container .sequence-container section /* or .protein */ { display: flex; flex-flow: row nowrap; }
 
-#sequence section div {
+.msa-container .sequence-container section div {
   min-width: 20px;
   min-height: 20px;
   background: #fff;
@@ -122,16 +122,16 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
 }
 
 /* Domain and Sequence Parts */
-#Domain-Sequence { position: relative; left: 162px; }
+.domain-sequence { position: relative; left: 162px; }
 
-#specieAndGenNameContainer {
+.species-and-gene-names {
   background: #fff;
   position: absolute;
   top: 0; left: 0;
   font-style: italic;
 }
 
-#geneName {
+.gene-name {
   position: absolute;
   left:2px;
   top: 40px;
@@ -147,13 +147,13 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   cursor: default;
 }
 
-#specieNames {
+.species-names {
   margin-top: 150px;
   cursor: pointer;
   font-style: italic;
 }
 
-.specieName {
+.species-name {
   min-height: 20px;
   max-height: 20px;
   /* border: 1px solid #fff; if you open it; do not forget to set height and width as 20px. Same for specieNames */
@@ -168,7 +168,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   color:  #FFF !important;
 }
 
-.specieName > a,a:link,a:hover,a:focus {font-size:14px;}
+.species-name > a,a:link,a:hover,a:focus {font-size:14px;}
 
 /* Specific Amino acids for ClinVar */
 .specialAa {
@@ -195,8 +195,8 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
 }
 
 
-#aaInfo { color: #333; font-family: 'Tajawal', sans-serif !important; font-size: 12px; }
-/*SCROLL ISLEMI OLMADAN #aaInfo div */ #ClinVarTextBox {
+.aminoacid-info { color: #333; font-family: 'Tajawal', sans-serif !important; font-size: 12px; }
+/*SCROLL ISLEMI OLMADAN .aminoacid-info div */ .variation-text-box {
   position: absolute;
   display: flex;
   z-index:999999;
@@ -212,7 +212,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
 
 }
 
-#ClinVarInnerTextBox {
+.variation-inner-text-box {
   height:140px !important;
   max-height:140px !important;
   padding: 10px !important;
@@ -221,10 +221,10 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   overflow-x:hidden;
 }
 
-#ClinVarInnerTextBox > a, a:link, a:visited, a:hover, a:focus {color : #FFF !important;}
-#ClinVarInnerTextBox h3{margin-top:20px;}
-#ClinVarInnerTextBox h3:nth-of-type(1) {margin-top: 0;}
-#aaInfo>div::after {
+.variation-inner-text-box > a, a:link, a:visited, a:hover, a:focus {color : #FFF !important;}
+.variation-inner-text-box h3{margin-top:20px;}
+.variation-inner-text-box h3:nth-of-type(1) {margin-top: 0;}
+.aminoacid-info>div::after {
   content: "";
   position: absolute;
   top: 14px;  
@@ -238,7 +238,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
 
 /*  In order to distinguish the sequence of Homo sapiens */
 #protein0 {border-bottom: 5px solid #fff;}
-.specieName:nth-child(1) {margin-bottom: 5px;}
+.species-name:nth-child(1) {margin-bottom: 5px;}
 
 /* Pulse Animation */
 @-webkit-keyframes pulse {
@@ -252,7 +252,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   100% {-moz-box-shadow: 0 0 0 0 rgba(0,0,0, 0);box-shadow: 0 0 0 0 rgba(0,0,0, 0);}
 }
 
-#ClinVarTextBox.rightArrow::after{right: -10px; left:auto!important;}
+.variation-text-box.rightArrow::after{right: -10px; left:auto!important;}
 
 .protein{position: relative; height:20px; background: url(https://i.hizliresim.com/y6O9yk.png) repeat-x; width:100%;}
 
@@ -261,5 +261,5 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
                       z-index: 1231!important;
                       border-radius:0!important;
                 }
-#GoToPosition{position:fixed;}
+.go-to-position{position:fixed;}
 #position-number {position:absolute; top:-20px!important;color:#000!important;}

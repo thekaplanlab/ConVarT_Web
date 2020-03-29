@@ -522,14 +522,14 @@
 
         var iframeWindow = iframe.contentWindow;
         var iframeDocument = iframe.contentDocument;
-        var viewportPosition = iframeWindow.getAminoacidPositionInViewport(protein, position-1);
+        var viewportPosition = iframeWindow.viewer.getAminoacidPositionInViewport(protein, position-1);
         //$(iframeDocument).find('#CurrentProjectTool').scrollLeft(viewportPosition*20 - iframe.clientWidth/2);
         $(iframeDocument).find('input[name=position]').val(position);
         iframe.contentWindow.document.getElementById("speciesSelect").selectedIndex = protein;
         // $(iframeDocument).find("speciesSelect").selectedIndex = protein;
         iframeWindow.positionKeyUp();
         setTimeout(function(){
-            iframeWindow.ClinVarInfo(protein, position-1);
+            iframeWindow.viewer.showVariation(protein, position-1);
         }, 125);
     }
 </script>

@@ -43,7 +43,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
           else {
               while ($row = mysqli_fetch_array($domainsQuery)) {
                   $length = $row['end_point'] -$row['start_point'];
-    $domainsResult .= '
+                 $domainsResult .= '
                       <a href="https://pfam.xfam.org/family/'.$row['pfam_id'].'" target="_blank">
                       <div class="domain" data-start-point="'.$row['start_point'].'" data-end-point="'.$row['end_point'].'"
                       style="display:none">
@@ -72,238 +72,29 @@ header("Cache-Control: max-age=$seconds_to_cache");
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="<?= $GLOBALS['base_url']; ?>files/js/js.js"></script>
     <script type="text/javascript">$('.tooltipped').tooltip();</script>
+    <script type="text/javascript" src="libs/msa_viewer.js?id=<?= rand(); ?>"></script>
 </head>
 <body>
 
     <!-- Current Project Tool -->
     <section id="CurrentProjectTool">
-            <!--Current Project | Domains and Sequences Parts -->
-            <section id="Domain-Sequence">
-                
-                <!-- Current Project | Protein Domains for Human -->
-                <section id="prLength">
-                    <?php echo $domainsResult; ?>
-                </section> <!-- end of domains -->
-
-                <!-- Current Project | Protein Sequences -->
-                <section id="sequence">
-                    <div id="aaInfo"></div>
-                </section> <!-- end of protein sequences -->
-
-            </section> <!-- end of domain and sequences parts -->
-
-            <!--Gene name and specie names-->
-            <section id="specieAndGenNameContainer">
-                <div id="geneName"><br>Human: <?php echo @$geneSymbol; ?></div>
-                <div id="specieNames"></div>
-            </section>
-            <section id="GoToPosition">
-                Search # <input type="number" placeholder="Type a position" name="position"> Species:<select name="species" id="speciesSelect"></select><br>
-                <script type="text/javascript">
-                  function positionKeyUp(){
-                      var position =$('input[name=position]').val();
-                      var species = parseInt($('select[name=species]').val());
-                      var alignmentPosition = getAminoacidPositionInViewport(species, position-1);
-                    
-                      $('#position-number').remove();
-                      $('.highlight-column').removeClass('highlight-column');
-                      $('.ptmHighlighted').removeClass('ptmHighlighted');
-                      $('#protein0').append('<div class="highlight-column" id="position-number" style="left:'+(alignmentPosition*20)+'px">'+position+'</div>');
-
-                      $('#CurrentProjectTool').scrollLeft(alignmentPosition*20 - ($('#CurrentProjectTool').width()-160)/2)
-
-                      setTimeout(function() {
-                        $('.i-'+alignmentPosition).addClass('highlight-column');
-                        $('#protein'+species+' .ptm.i-'+alignmentPosition).addClass('ptmHighlighted');
-                      }, 75);
-                  
-                  }
-                  $('input[name=position]').on("keyup", positionKeyUp);
-                  $('select[name=species]').on("change", positionKeyUp);
-                </script>
-            </section>
-            <br><br>
     </section><!-- end of Current Project tool -->
 
     <!-- Current Project Tool -->
     <script type="text/javascript">
+    var id = 'CurrentProjectTool';
+    var fasta = '<?= str_replace("\n", "\\n", $fasta); ?>';
+    var geneSymbol = '<?= @$geneSymbol; ?>';
+    var domains = `<?= $domainsResult?>`;
+    var variations = [
 
-    var clinvarNotes = {};
-    var ptmNotes = {};
+    ]
 
-    function ClinVar(protein, aminoacid, variationNote, source) {
-      let prNumber = protein; 
-      let aaNumber = aminoacid - 1; // the aacids start from 0
-      
-      notesByProtein = clinvarNotes[protein]
-      if(notesByProtein == undefined)
-        notesByProtein = []
+    var viewer = new MSAViewer(id, fasta, geneSymbol, variations, domains);
 
-
-      if(notesByProtein[aaNumber] == undefined) {
-         notesByProtein[aaNumber] = {};
-         notesByProtein[aaNumber][source] = "";
-      }  else if(notesByProtein[aaNumber][source] == undefined) {
-        notesByProtein[aaNumber][source] = "";
-      }
-
-      notesByProtein[aaNumber][source] += "<br>" + variationNote;
-      clinvarNotes[protein] = notesByProtein
-      
-      if (source == "PTM") {
-        ptmNotes[aaNumber] +=  aminoacid + 1;
-      }
-    }
-
-    // ClinVar Box Info
-    function ClinVarInfo(prNumber, aaNumber) {
-      let ClinVarTextBox = document.createElement("div");
-      let ClinVarInnerTextBox = document.createElement("div"); // YENI -> ClinVar Notu Uzunsa Scroll Yaptırmak için
-      ClinVarTextBox.setAttribute("id", "ClinVarTextBox");
-      ClinVarInnerTextBox.setAttribute("id", "ClinVarInnerTextBox");
-
-      proteinNotes = clinvarNotes[prNumber];
-      for(var source in proteinNotes[aaNumber]) {
-        ClinVarInnerTextBox.innerHTML += "<h3>"+source+"</h3>"  + proteinNotes[aaNumber][source];
-        //console.log(source);
-      }
-      var aaInfoBox = document.getElementById('aaInfo');
-      aaInfoBox.innerHTML = '';
-      aaInfoBox.appendChild(ClinVarTextBox).appendChild(ClinVarInnerTextBox); // time to insert the ClinVarTextBox into aaInfoBox | eski: aaInfoBox.appendChild(ClinVarTextBox)
-      $("#ClinVarInnerTextBox").mouseleave(function(e) {
-        closeClinVarBox();
-      });    
-
-      offsetX = getOffset(prNumber, aaNumber);
-      var container = document.getElementById("protein0");
-
-      if(container.scrollWidth < (offsetX +600) ) {
-        offsetX = offsetX - 340;
-
-        ClinVarTextBox.className = "rightArrow";
-      }
-      let specificPositionforCVBox = "top: " + (prNumber * 20 - 13) + "px;" + "left: " + (offsetX) + "px;  box-shadow:#555 1px 1px 5px 3px;";
-      document.getElementById('aaInfo').childNodes[0].style.cssText = specificPositionforCVBox;
-
-    }
-
-    function getOffset(prNumber, aaNumber){
-      var indexOfAA = getAminoacidPositionInViewport(prNumber, aaNumber);
-      var container = document.getElementById("protein0");
-
-      var offsetX = indexOfAA * 20 + 30;
-
-      return offsetX;
-    }
-    /* Close ClinVar Box */
-    function closeClinVarBox(ClinVarNote) {
-      var aaInfo = document.getElementById('aaInfo');
-      aaInfo.innerHTML = "";
-      
-    } 
-    var rawSequence = '<?= str_replace("\n", "\\n", $fasta); ?>';
-
-    // Load Alignment File
-    function loadAlignmentTXT() {
-      
-      loadSeq(rawSequence);
-
-    }
-    var isInitialized = false;
-    var processedSequences = [];
-    var loadedPositions = [];
-    var viewportToAANumber = []
-    // Core Code
-    function loadSeq(txt) {
-      let startPr, endPr, startPr2 = -1;
-      let j = 0;
-
-      do {
-          startPr = txt.indexOf(">", startPr + 1);
-          endPr = txt.indexOf("\n", startPr + 1);
-          startPr2 = txt.indexOf(">", startPr + 1);
-          let seq1 = txt.slice(endPr + 1, startPr2);
-          //removing new line characters inside seq1
-          seq1 = seq1.replace(/\s/g, "");
-          let proteinId = "protein" + [j];
-
-          viewportToAANumber.push([]);
-          aa_ind = 0;
-          for(ind = 0; ind < seq1.length; ind++) {
-            
-            if(seq1.charAt(ind) == '-'){
-              viewportToAANumber[j].push(-1);
-              continue;
-            } else {
-              viewportToAANumber[j].push(aa_ind);
-              aa_ind++;
-            }
-          }
-          
-
-          processedSequences[j] = seq1;
-          //Protein Name-Identifier
-          let prName = txt.slice(startPr+1, endPr + 1);
-          let prID = prName.split(" ")[0]; // 7 MART
-          let species = prName.split("[").slice(-1)[0].split("]")[0]; 
-          $('select[name=species]').html($('select[name=species]').html()+'<option value="'+j+'">'+species+'</option>'); 
-          let species_by_word = species.split(" ");
-          species = species_by_word[0][0]+". " + species_by_word[1]; 
-          //Protein sequences slicing
-          
-          //console.log(seq1.length);
-          var proteinLengthforDomain = "width:" + seq1.length*20 + "px;"; // every aacid inside a box in 20x20 size
-          //console.log(proteinLengthforDomain);
-          document.getElementById("prLength").style=proteinLengthforDomain;
-          //creating flex container for proteins
-          let protein = document.createElement("section");
-          document.getElementById("sequence").appendChild(protein); 
-          protein.id = proteinId;
-          protein.className="protein";
-          j++;
-          // write the name of the species and genes
-          var SpecieName = document.createElement("div");
-          var SpecieNameLink = document.createElement("a");
-          var prType = prName.substring(0, 2);
-          // console.log('hey', prType);
-          if (prType == "NP" || prType == "XP" ) {
-          	SpecieNameLink.setAttribute("href", "https://www.ncbi.nlm.nih.gov/protein/" + prID);
-          }
-          if (prType == "EN") {
-          	SpecieNameLink.setAttribute("href", "https://www.ensembl.org/id/" + prID);
-          }
-          regexPattern = "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
-          if (prName.search(regexPattern) != "-1") {
-            prID = prName.split(" ")[1];
-            SpecieNameLink.setAttribute("href", "https://www.uniprot.org/uniprot/" + prID);
-            species_by_word = prName.split("=")[1].split(" ");
-            species = species_by_word[0][0]+". " + species_by_word[1];
-          }
-
-          regexPattern = "[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
-          if (prName.search(regexPattern) != "-1") {
-            prID = prName.split(" ")[1];
-            SpecieNameLink.setAttribute("href", "https://www.uniprot.org/uniprot/" + prID);
-            species_by_word = prName.split("=")[1].split(" ");
-            species = species_by_word[0][0]+". " + species_by_word[1];
-          }
-
-          SpecieNameLink.setAttribute('target', '_blank');
-          SpecieNameLink.setAttribute('class','tooltipped');
-          SpecieNameLink.setAttribute('data-position','right');
-          SpecieNameLink.setAttribute('data-tooltip',prName);
-
-          document.getElementById("specieNames").appendChild(SpecieName).appendChild(SpecieNameLink);
-          SpecieName.className = "specieName";
-          SpecieNameLink.appendChild(document.createTextNode(species)); //// exception case olacak 
-        
-      } while (startPr2 != -1);
-      for(i = 0; i < processedSequences[0].length; i++){
-        loadedPositions.push(false);
-      }
       // TODO: Load these things from AJAX
        
-       /* List the ClinVar Data */
+       /* List the viewer.addVariation Data */
         <?php
 
         if(isset($geneInfoHuman['dbs']['NP'])):    
@@ -320,7 +111,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
               $new_variation = str_replace(array('(',')'), '', $variation);
               $clinvarnote = 'Variation ID: '.$row['variation_id'].' <br> rsNumber: '.$rs_number.'<br> '.$new_variation.' <br> '.$row['variant_type'].' <br> '.$row['clinical_significance'].'<br>'.$row['phenotypes'];
         ?>
-              ClinVar(0, <?php echo $position; ?>, ' <?php echo str_replace("'", "\\'",$clinvarnote); ?>', 'ClinVar');
+              viewer.addVariation(0, <?php echo $position; ?>, ' <?php echo str_replace("'", "\\'",$clinvarnote); ?>', 'ClinVar');
         <?php endwhile; ?>
         <?php endif;?>
 
@@ -348,7 +139,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
                 $gnomADnote = 'Variation ID:<a style="color:#1976D2 !important; font-size:15px !important;" href="https://gnomad.broadinstitute.org/variant/'.$row['variant_id'].'" target="_blank"> '.$row['variant_id'].'</a> <br> Frequency: '.$freq.' <br> rsNumber: '.$row['rs_number'].'<br> '.$new_variation.' <br> '.$row['consequence'];
         ?>
-            ClinVar(0, <?php echo $position; ?>, ' <?php echo $gnomADnote; ?>', 'gnomAD');
+            viewer.addVariation(0, <?php echo $position; ?>, ' <?php echo $gnomADnote; ?>', 'gnomAD');
         <?php endwhile; ?>
         <?php endif; ?>
        
@@ -365,7 +156,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 }
                 $PTMnote = 'Mod_rsd: '.$row['mod_rsd'].'<br>PTM Type: '.$row['ptm_type'];
         ?>
-            ClinVar(0, <?php echo $position; ?>, '<?php echo $PTMnote; ?>', 'PTM');
+            viewer.addVariation(0, <?php echo $position; ?>, '<?php echo $PTMnote; ?>', 'PTM');
         <?php endwhile; ?>
         <?php endif; ?> 
 
@@ -381,7 +172,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 }
                 $COSMICnote = 'Mutation: '.$row['mutation_aa'].'<br>'.$row['mutation_id'].' <br>'.$row['primary_site'].'<br>Fathmm:'.$row['fathmm_prediction'].'|'.$row['fathmm_score'].'<br>';
         ?>
-            ClinVar(0, <?php echo $position; ?>, '<?php echo str_replace("'", "\\'", $COSMICnote); ?>', 'COSMIC');
+            viewer.addVariation(0, <?php echo $position; ?>, '<?php echo str_replace("'", "\\'", $COSMICnote); ?>', 'COSMIC');
         <?php endwhile; ?>
         <?php endif; ?>   
 
@@ -399,7 +190,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
                 $clearProteinChange = explode(":", $proteinChanges)[1];
                 $dbSNPnote = 'Mutation: '.$clearProteinChange.'<br>'.$row['Consequence'].' <br> Impact: '.$row['Impact'].'<br>';
         ?>
-            ClinVar(0, <?php echo $position; ?>, '<?php echo $dbSNPnote; ?>', 'dbSNP');
+            viewer.addVariation(0, <?php echo $position; ?>, '<?php echo $dbSNPnote; ?>', 'dbSNP');
         <?php endwhile; ?>
         <?php endif; ?>  
 
@@ -414,150 +205,11 @@ header("Cache-Control: max-age=$seconds_to_cache");
         }
         $mouseNote = 'Mutation: '.$row['aa_change'].' at ' .$position. '<br> Mutation Type: '.$row['mutation_type'] .'<br>Note:'.$row['pred_text'];
         ?>
-        ClinVar(1, <?php echo $position; ?>, '<?php echo $mouseNote; ?>', 'Mouse Variant');
+        viewer.addVariation(1, <?php echo $position; ?>, '<?php echo $mouseNote; ?>', 'Mouse Variant');
       <?php endwhile; ?>
+      
+      viewer.loadDivsInViewport(true);
 
-    }
-
-    function loadDivsInViewport(){
-          var viewportOffset = document.getElementById('sequence').getBoundingClientRect();
-
-          var aminoacid_index = 0;
-         
-          startX = parseInt((Math.abs(viewportOffset.left) - document.getElementById('specieAndGenNameContainer').clientWidth)/20 - window.innerWidth/40) ;
-          if(startX < 0){
-            startX = 0;
-          }
-          endX = parseInt(startX+(document.getElementById('specieAndGenNameContainer').clientWidth)/20 + 3*window.innerWidth/40 + 20) ;
-          
-          if(processedSequences[0].length <= endX) {
-            endX = processedSequences[0].length-1;
-          }
-
-          
-          for(j = 0; j < processedSequences.length; j++){
-            seq1 = processedSequences[j];
-             var documentFragment = document.createDocumentFragment();
-            for (i = startX; i < endX; i++) {
-
-              if(loadedPositions[i] && seq1.length < 5000){
-                  continue;
-              }
-              let aaBox = document.createElement("div");
-              //reading protein sequence letter by letter
-              var aaLetter = seq1.charAt(i);
-              //creating amino acid boxes
-              
-              if(aaLetter != '-'){
-                  aminoacid_index+= 1;
-                  
-                  aaBox.className = "i-"+i;  
-              }
-              if(aaLetter == '-'){
-                continue;
-              }
-
-              if(j in clinvarNotes && viewportToAANumber[j][i] != -1 && viewportToAANumber[j][i] in clinvarNotes[j]){
-                 aaBox.className += " specialAa";
-                 aaBox.setAttribute('data-sid', j);
-              }
-
-              if(j == 0 && viewportToAANumber[j][i] != -1 && viewportToAANumber[j][i] in ptmNotes){
-                 aaBox.className += " ptm";
-                 aaBox.setAttribute('data-sid', j);
-              }
-
-              aaBox.innerHTML = aaLetter;
-              aaBox.style.cssText  = 'left:'+(i*20)+'px;';
-              //giving the proper color to each amino acid
-              if (aaLetter.includes("M") === true || aaLetter.includes("C") === true) {aaBox.style.cssText += "background-color:#a5a513"};
-              if (aaLetter.includes("A") === true) {aaBox.style.cssText += "background-color:#C8C8C8"};
-              if (aaLetter.includes("L") === true || aaLetter.includes("V") === true || aaLetter.includes("I") === true) {aaBox.style.cssText += "background-color:#0F820F"};
-              if (aaLetter.includes("D") === true || aaLetter.includes("E") === true) {aaBox.style.cssText += "background-color:#E60A0A"};
-              if (aaLetter.includes("K") === true || aaLetter.includes("R") === true) {aaBox.style.cssText += "background-color:#145AFF"};
-              if (aaLetter.includes("S") === true || aaLetter.includes("T") === true) {aaBox.style.cssText += "background-color:#FA9600"};
-              if (aaLetter.includes("F") === true || aaLetter.includes("Y") === true) {aaBox.style.cssText += "background-color:#3232AA"};
-              if (aaLetter.includes("N") === true || aaLetter.includes("Q") === true) {aaBox.style.cssText += "background-color:#00DCDC"};
-              if (aaLetter.includes("G") === true) {aaBox.style.cssText += "background: #EBEBEB; color: #777;"};
-              if (aaLetter.includes("W") === true) {aaBox.style.cssText += "background-color:#B45AB4"};
-              if (aaLetter.includes("-") === true) {aaBox.style.cssText += "background-color:#333"};
-              if (aaLetter.includes("H") === true) {aaBox.style.cssText += "background-color:#8282D2"};
-              if (aaLetter.includes("P") === true) {aaBox.style.cssText += "background-color:#DC9682"};
-              documentFragment.appendChild(aaBox);
-              aaBox = null;
-          }
-              let element = document.getElementById('protein'+j);
-              if(seq1.length >= 5000){
-                element.innerHTML = '';  
-              }
-              element.appendChild(documentFragment);
-              documentFragment.innerHTML='';
-          }
-          
-          for(i = 0; i < seq1.length; i++){
-            if(i >= startX && i < endX)
-              loadedPositions[i] = true;
-            else if(seq1.length >= 5000)
-              loadedPositions[i] = false;
-          }  
-          
-          
-    }
-    // Time To Run
-    loadAlignmentTXT();
-    loadDivsInViewport();
-    $('#CurrentProjectTool').scroll(function() {
-      loadDivsInViewport();
-    })
-    function getAminoacidPositionInViewport(species_id, position){
-      var sequence = processedSequences[species_id];
-      var aminoacid_index = 0;
-      for(i = 0; i< sequence.length; i++){
-        if(sequence.charAt(i) == '-')
-          continue;
-        if(aminoacid_index == position){
-          return i;
-        }
-        if(sequence.charAt(i) != '-'){
-          aminoacid_index++;
-        }
-        
-      }
-      return -1;
-    }
-
-    function scrollIfNeeded(element, container) {
-
-      const halfClientWidth = container.clientWidth / 2;
-      if (element.offsetLeft < container.scrollLeft-200) {
-        container.scrollLeft = element.offsetLeft - halfClientWidth;
-      } else {
-        const offsetRight = element.offsetLeft + element.offsetWidth;
-        const scrollRight = container.scrollLeft + container.offsetWidth;
-        if (offsetRight+200 > scrollRight) {
-          container.scrollLeft = offsetRight - halfClientWidth;
-        }
-      }
-    }
-
-    $('.domain').each(function() {
-      //console.log($(this).data('start-point'), );
-      startPosition = getAminoacidPositionInViewport(0, parseInt($(this).data('start-point'))-1);
-
-      width = getAminoacidPositionInViewport(0, parseInt($(this).data('end-point'))-1) - startPosition;
-
-      $(this).css('display', 'flex');
-      $(this).css('left', (startPosition*20)+'px');
-      $(this).width((width*20)+'px');
-    });
-
-    $(document).on('mouseover', '.specialAa', function(){
-        prNumber = $(this).data('sid');
-        aaNumber = parseInt($(this).attr('class').split(' ')[0].split('-')[1])
-        ClinVarInfo(prNumber, viewportToAANumber[prNumber][aaNumber]);
-     });
-    $('.protein').width(($('#prLength').width())+'px');
-    $('#sequence').width(($('#prLength').width())+'px');
     </script>
 
 </body>
