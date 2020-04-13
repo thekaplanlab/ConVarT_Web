@@ -99,8 +99,8 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
 
 .domain > a, a:link, a:visited, a:hover, a:focus {text-decoration:none; font-size:20px; color:#FFF; }
 
-#domain_sp {position:absolute; left:5px}
-#domain_ep {position:absolute; right:5px;}
+.domain_start_point {position:absolute; left:5px}
+.domain_end_point {position:absolute; right:5px;}
 
 .msa-container .sequence-container {position: relative; }
 
@@ -261,5 +261,24 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
                       z-index: 1231!important;
                       border-radius:0!important;
                 }
-.go-to-position{position:fixed;}
+.go-to-position{position:fixed; margin-left: 5px}
 #position-number {position:absolute; top:-20px!important;color:#000!important;}
+
+/* Form CSS */
+.form_input {
+    margin: 15px 1px;
+    height: 15px;
+    width: 40px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #555;
+    border: 1px solid #555;
+    outline: none;
+    padding-left: 3px;
+    text-align: center;
+    border-radius: 30px;
+}
+.form_input::-webkit-input-placeholder {font-size: 15px; color: #555; opacity: 1;} 
+.form_input::-moz-placeholder {font-size: 15px; color: #555; opacity: 1;} 
+.form_input:-ms-input-placeholder {font-size: 15px; color: #555; opacity: 1;} 
+.form_input:-moz-placeholder {font-size: 15px; color: #555; opacity: 1;}

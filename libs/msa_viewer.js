@@ -1,6 +1,6 @@
 
 
-function MSAViewer(id, rawSequence, geneSymbol, variations, domains) {
+function MSAViewer(id, rawSequence, geneSymbol, variations) {
     var ids = {
         id: id,
         domainSequence: id+'-domain-sequence',
@@ -25,7 +25,6 @@ function MSAViewer(id, rawSequence, geneSymbol, variations, domains) {
                 
                 <!-- Current Project | Protein Domains for Human -->
                 <section id="${ids.proteinLength}" class="protein-length">
-                    ${domains}
                 </section> <!-- end of domains -->
 
                 <!-- Current Project | Protein Sequences -->
@@ -49,17 +48,7 @@ function MSAViewer(id, rawSequence, geneSymbol, variations, domains) {
     this.mainDiv = $('#' + id).find('.msa-container');
     $mainDiv = this.mainDiv;
 
-    $goToDiv = $mainDiv.find('.go-to-position');
-
-    $goToDiv.append('Search # <input type="number" placeholder="Type a position" name="position" id="'+ids.positionInput+'">');
-    $goToDiv.append('Species:<select name="species" id="'+ids.speciesSelect+'"></select><br>');
-
-    $('#'+ids.positionInput).on("keyup", function() {
-        that.positionKeyUp();
-    });
-    $('#'+ids.speciesSelect).on("change", function() {
-        that.positionKeyUp();
-    });
+    this.loadAminoacidSearch();
 
     var variationNotes = {};
     this.variationNotes = variationNotes;
@@ -203,11 +192,20 @@ function MSAViewer(id, rawSequence, geneSymbol, variations, domains) {
 
     // Time To Run
     loadSeq(rawSequence);
+    if ((typeof(domains) != "undefined") && (domains.length != 0)) {
+        this.addDomains(domains);
+    }
     this.loadDivsInViewport();
     $mainDiv.scroll(function() {
         that.loadDivsInViewport();
     });
 
+    this.loadDomainBar();
+
+}
+
+MSAViewer.prototype.loadDomainBar = function() {
+    var that = this;
     $('.domain').each(function() {
         //console.log($(this).data('start-point'), );
         startPosition = that.getAminoacidPositionInViewport(0, parseInt($(this).data('start-point'))-1);
@@ -224,22 +222,24 @@ function MSAViewer(id, rawSequence, geneSymbol, variations, domains) {
         aaNumber = parseInt($(this).attr('class').split(' ')[0].split('-')[1])
         that.showVariation(prNumber, viewportToAANumber[prNumber][aaNumber]);
     });
-    
+
+        
+    var ids = this.ids;
     $('.protein').width(($('#'+ids.proteinLength).width())+'px');
     $('#'+ids.sequence).width(($('#'+ids.proteinLength).width())+'px');
 }
 
 MSAViewer.prototype.getAminoacidPositionInViewport = function(species_id, position) {
     var sequence = processedSequences[species_id];
-    var aminoacid_index = 0;
+    var aminoacidIndex = 0;
     for(i = 0; i< sequence.length; i++){
     if(sequence.charAt(i) == '-')
         continue;
-    if(aminoacid_index == position){
+    if(aminoacidIndex == position){
         return i;
     }
     if(sequence.charAt(i) != '-'){
-        aminoacid_index++;
+        aminoacidIndex++;
     }
     
     }
@@ -264,6 +264,23 @@ MSAViewer.prototype.positionKeyUp = function() {
         $mainDiv.find('.i-' + alignmentPosition).addClass('highlight-column');
         $mainDiv.find('#protein' + species + ' .ptm.i-' + alignmentPosition).addClass('ptmHighlighted');
     }, 75);
+}
+
+MSAViewer.prototype.loadAminoacidSearch = function() {
+    var ids = this.ids;
+    var that = this;
+    
+    $goToDiv = this.mainDiv.find('.go-to-position');
+
+    $goToDiv.append('Search a position: <input type="number" placeholder="3" name="position" class="form_input" id="'+ids.positionInput+'">');
+    $goToDiv.append(' Species : <select name="species" id="'+ids.speciesSelect+'"></select><br>');
+
+    $('#'+ids.positionInput).on("keyup", function() {
+        that.positionKeyUp();
+    });
+    $('#'+ids.speciesSelect).on("change", function() {
+        that.positionKeyUp();
+    });
 }
 
 MSAViewer.prototype.loadDivsInViewport = function(reset) {
@@ -362,6 +379,29 @@ MSAViewer.prototype.loadDivsInViewport = function(reset) {
 
 }
 
+MSAViewer.prototype.addDomains = function(domains) {
+    var ids = this.ids;
+    for (var key in domains){
+        domain_id = domains[key]["domain_id"];
+        domain_name = domains[key]["domain_id"];
+        domain_external_link = domains[key]["domain_external_link"];
+        domain_start_point = domains[key]["domain_start_point"];
+        domain_end_point = domains[key]["domain_end_point"];
+
+        domain_template = `
+        <a href="${domain_external_link}" target="_blank">
+            <div class="domain" data-start-point="${domain_start_point}" data-end-point="${domain_end_point}">
+                <div class="domain_start_point">${domain_start_point}</div>
+                <p>${domain_name} (${domain_start_point} - ${domain_end_point})</p>
+                <div class="domain_end_point">${domain_end_point}</div>
+            </div>
+        </a>
+        `;
+
+        $('#' + ids.proteinLength).append(domain_template);
+    };
+}
+
 MSAViewer.prototype.addVariation = function(protein, aminoacid, variationNote, source) {
     let aaNumber = aminoacid - 1; // the aacids start from 0
 
@@ -398,3 +438,38 @@ MSAViewer.prototype.scrollIfNeeded = function(element, container) {
       }
     }
 }
+
+MSAViewer.prototype.addConsensus = function(consensus_parameter) {
+    if(consensus_parameter ==  "Yes") {
+        var aaCount = processedSequences[0].length;
+        for (let aaInd = 0; aaInd < aaCount; aaInd++) {
+            var position_dict = {};
+            for (let proteinIndex = 0; proteinIndex < processedSequences.length; proteinIndex++) {
+                var protein = processedSequences[proteinIndex];
+                var aminoacid = protein[aaInd];
+                position_dict[aminoacid] = aaInd;
+        }
+            console.log(position_dict);
+            var consensus_logo = [" "];
+            if (Object.keys(position_dict).length == 1){
+                // consensus_logo = consensus_logo.concat(aminoacid);
+                console.log("Consensus");
+            }
+            else if (Object.keys(position_dict).length == processedSequences.length/2) {
+                // consensus_logo = consensus_logo.concat(':');
+                console.log("Half of them are conserved");
+            }
+            else if (Object.keys(position_dict).length == processedSequences.length)
+            {
+                // consensus_logo = consensus_logo.concat('-');
+                console.log("All of them are different.");
+            }
+            else{
+                // consensus_logo = consensus_logo.concat('.');
+                console.log("Not fully conserved.");
+            }
+        }
+        // console.log(consensus_logo);
+        // processedSequences.push(consensus_logo);
+    }
+} 

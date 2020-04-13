@@ -39,20 +39,23 @@ header("Cache-Control: max-age=$seconds_to_cache");
       #Domains
       $domainsQuery = mysqli_query($db_connection, "SELECT * FROM domains WHERE transcript_id LIKE '{$msa['human_transcript_id']}%' AND evalue < 1e-01");
       $countForDomains = mysqli_num_rows($domainsQuery);
-      if ($countForDomains == 0) {$domainsResult=""; }
-          else {
+      $domains = [];
+      if ($countForDomains == 0) {
+          $domainsResult=""; 
+        }
+      else {
               while ($row = mysqli_fetch_array($domainsQuery)) {
-                  $length = $row['end_point'] -$row['start_point'];
-                 $domainsResult .= '
-                      <a href="https://pfam.xfam.org/family/'.$row['pfam_id'].'" target="_blank">
-                      <div class="domain" data-start-point="'.$row['start_point'].'" data-end-point="'.$row['end_point'].'"
-                      style="display:none">
-					            <div id="domain_sp">'.$row['start_point'].'</div><p>'
-                      .$row['pfam_name'].' ('.$row['start_point'].' - '.$row['end_point'].'</p>)
-					            <div id="domain_ep">'.$row['end_point'].'</div>
-				               </div></a>';
-              }
-      }
+                $domains[] = [
+                  'domain_id' => $row['pfam_id'],
+                  'domain_name' => $row['pfam_name'],
+                  'domain_external_link' => "https://pfam.xfam.org/family/".$row['pfam_id'],
+                  'domain_start_point'  => $row['start_point'],
+                  'domain_end_point' => $row['end_point']
+                ] ;
+                
+            }
+        }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,7 +88,7 @@ header("Cache-Control: max-age=$seconds_to_cache");
     var id = 'CurrentProjectTool';
     var fasta = '<?= str_replace("\n", "\\n", $fasta); ?>';
     var geneSymbol = '<?= @$geneSymbol; ?>';
-    var domains = `<?= $domainsResult?>`;
+    var domains = <?= json_encode($domains); ?>;
     var variations = [
 
     ]
