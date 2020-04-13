@@ -35,7 +35,7 @@
 
     $transcriptIdMouse = getTranscriptIdByConvartGeneId($mouse_convart_id);
     $geneDetailsMouse = getGeneDetailsById($transcriptIdMouse);
-    $dbIds = explode(',', str_replace('"', '', $geneDetailsMouse['dbs']['OTHER']));
+    $dbIds = explode(',', str_replace('"', '', $geneDetailsMouse['dbs']['ENSMUST']));
     $enstIdMouse = end(array_filter($dbIds, function($x) {return strstr($x, 'ENS') !== FALSE; }));
 
     $transcriptIdWorm = getTranscriptIdByConvartGeneId($worm_convart_id);
