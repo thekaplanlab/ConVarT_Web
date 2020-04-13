@@ -22,6 +22,11 @@
         $msa = getMSAByGeneId($transcriptId, true);         
    }
 
+    if (!isset($msa) or empty($msa)) {
+        echo '<div class="center-align card-panel blue "> <span class="white-text">The MSA could not be found! </span><br> <br><a href="http://convart.org" class="btn white blue-text">Go Back to Search Page</a> </div>';
+        exit();
+    }
+
    $geneInfo = [];
 
    if($geneDetails['species_id']=='Homo sapiens'){
