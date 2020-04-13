@@ -386,6 +386,31 @@
         </div><br>
     </div>
 
+    <!-- C.elegans variants table -->
+    <div class="col s12 m12 l12">
+        <div class="collapsible-header active"><i class="material-icons">healing</i><t>C. elegans</t> Variants</div>
+        <div class="collapsible-body">
+            <div id="cel_chart"></div>
+            <div class="table-wrapper"><table id="celTable" class="special_table hide">
+                <thead>
+                    <tr>
+                        <th>Gene Name <i class="material-icons right">filter_list</i></th>
+                        <th>NCBI Gene ID <i class="material-icons right">filter_list</i></th>
+                        <th>WormBase Sequence Name <i class="material-icons right">filter_list</i></th>
+                        <th>RefSeq Protein ID <i class="material-icons right">filter_list</i></th>
+                        <th>Position <i class="material-icons right">filter_list</i></th>
+                        <th>Changes <i class="material-icons right">filter_list</i></th>
+                        <th>Mutation type <i class="material-icons right">filter_list</i></th>
+                        <th>WormBase Variant ID <i class="material-icons right">filter_list</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+        </table></div>
+        </div><br>
+    </div>
+
     <!-- Domains Table -->
     <div class="col s12 m12 l12">
         <div class="collapsible-header active"><i class="material-icons">format_align_center</i>Protein Domains (PFAM)</div>
@@ -538,7 +563,8 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.0/css/scroller.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<!-- Table -->
+
+<!-- Tables -->
 <script type="text/javascript">
     $(document).ready(function() {
     <?php if(isset($humanGeneDetails['dbs']['NP'])): ?>
@@ -633,7 +659,9 @@
         "serverSide": false,
         "pageLength": 20,
         
-        "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<?= urlencode($enstIdMouse); ?>",
+        <?php if(isset($enstIdMouse)): ?>
+            "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=mouseVariants&id=<?= urlencode(normalizeIds($enstIdMouse)); ?>",
+        <?php endif; ?>
         "columnDefs": [{
             "targets": 0,
             "render": function(data, type, row) {
@@ -660,6 +688,43 @@
         }
     } );
     $('#mouseVariantsTable').removeClass('hide');
+
+    //Celegans Variants Table
+    $('#celTable').DataTable( {
+            "processing": false,
+            "serverSide": false,
+            "pageLength": 20,
+
+            <?php if(isset($transcriptIdWorm)): ?>
+            "ajax": "<?= $GLOBALS['base_url']; ?>/api.php?action=celVariants&id=<?= urlencode(normalizeIds($transcriptIdWorm)); ?>",
+            <?php endif; ?>
+            "columnDefs": [{
+                "targets": 1,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" target="_blank" href="http://ncbi.nlm.nih.gov/gene/'+data+'">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            },{
+                "targets": 4,
+                "render": function(data, type, row) {
+                    var position = data.split('---')[0];
+                    return '<a class="variation-link" onclick="goToVariation(2, '+position+')">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            },{
+                "targets": 7,
+                "render": function(data, type, row) {
+                    return '<a class="variation-link" target="_blank" href="https://wormbase.org/species/c_elegans/variation/'+data+'">'+data+'</a>';
+                },
+                "defaultContent": "<button>Click!</button>"
+            }  ], 
+            "deferRender": true,
+            language: {
+                searchPlaceholder: "Search in the table",
+                search: ""
+            }
+        } );
+        $('#celTable').removeClass('hide');
         
         <?php if(array_sum($ptmCounts) > 0): ?>
         //PTM Table

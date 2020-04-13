@@ -482,6 +482,20 @@ function getdbSNPData($transcriptId, $column='Feature', $cols='*'){
     return $query;
 }
 
+function getCelVariantsData($transcriptId, $column='RefSeq.protein.ID', $cols='*'){
+    global $db_connection;
+
+    if($transcriptId == null)
+        return null;
+
+    $query = mysqli_query($db_connection, "SELECT $cols FROM `missense_c_elegans` WHERE `RefSeq.protein.ID` = '$transcriptId' ORDER BY `Variant_position` DESC");
+    
+    if(mysqli_num_rows($query) == 0)
+        return null;
+
+    return $query;
+}
+
 
 function searchProteinNumbers($value){
     global $db_connection;
@@ -502,7 +516,8 @@ function searchProteinNumbers($value){
                         cdb.db_id=nc_prot.meta_value
                         INNER JOIN msa_gene AS mg ON 
                         mg.convart_gene_id=cdb.convart_gene_id
-
+                        INNER JOIN msa_best_combination AS mb ON
+                        mb.msa_id = mg.msa_id
                          WHERE nc_search.meta_value IN ('{$value}') OR nc_search.ncbi_gene_id IN ('{$value}')
                           GROUP BY nc_prot.ncbi_gene_id LIMIT 10");
     $searchResultBySpecies = [];

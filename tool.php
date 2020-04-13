@@ -20,6 +20,12 @@ header("Cache-Control: max-age=$seconds_to_cache");
     $msa = getMSAById($msaId);
     $fasta = $msa['fasta'];
     $mouse_transcript_id = $msa['mouse_transcript_id'];
+
+    $geneDetailsMouse = getGeneDetailsById($mouse_transcript_id);
+    $dbIds = explode(',', str_replace('"', '', $geneDetailsMouse['dbs']['ENSMUST']));
+    $enstIdMouse = end(array_filter($dbIds, function($x) {return strstr($x, 'ENS') !== FALSE; }));
+    // print($enstIdMouse);
+
     $worm_transcript_id = $msa['worm_transcript_id'];
     
     $domainsResult="";
@@ -199,8 +205,8 @@ header("Cache-Control: max-age=$seconds_to_cache");
 
       /* List the Mouse Variants */
       <?php
-        $mouseQuery = getMouseVariantsData($mouse_transcript_id);
-
+        $mouseQuery = getMouseVariantsData($enstIdMouse);
+        
         while ($row = @mysqli_fetch_array($mouseQuery)):
         $position=$row['Position'];
         if ($position == "" || $position == NULL) {
@@ -210,6 +216,20 @@ header("Cache-Control: max-age=$seconds_to_cache");
         ?>
         viewer.addVariation(1, <?php echo $position; ?>, '<?php echo $mouseNote; ?>', 'Mouse Variant');
       <?php endwhile; ?>
+
+      /* List the Celegans Variants */
+      <?php
+        $celQuery = getCelVariantsData($worm_transcript_id);
+
+        while ($row = @mysqli_fetch_array($celQuery)):
+        $position=$row['Variant_position'];
+        if ($position == "" || $position == NULL) {
+        $position  = 0;
+        }
+        $celNote = 'Mutation: '.$row['Changes'].' at ' .$position. '<br> Mutation Type: '.$row['Mutation_type'] .'<br>WormBase Var. ID:'.$row['WormBase.var.ID'];
+        ?>
+        viewer.addVariation(2, <?php echo $position; ?>, '<?php echo $celNote; ?>', 'C. elegans Variant');
+        <?php endwhile; ?>
       
       viewer.loadDivsInViewport(true);
 

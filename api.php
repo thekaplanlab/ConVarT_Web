@@ -173,6 +173,24 @@ switch ($_GET['action']) {
         }
         break;
 
+        case 'celVariants':
+            $celVariantsQuery = getCelVariantsData($id);
+            $data = [];
+    
+            while($row = mysqli_fetch_assoc($celVariantsQuery)){
+                $data[] = [
+                    $row['Gene.name'],
+                    $row['NCBI.Gene.ID'],
+                    $row['WormBase.Sequence.Name'],
+                    $row['RefSeq.protein.ID'],
+                    $row['Variant_position'] . '---' .$row['Changes'], 
+                    $row['Changes'],
+                    $row['Mutation_type'],
+                    $row['WormBase.var.ID']
+                ];
+            }
+            break;
+
     case 'cosmic':
        
         $data = [];
