@@ -171,8 +171,6 @@ function MSAViewer(id, rawSequence, geneSymbol, variations) {
             if (prName.search(regexPattern) != "-1") {
                 prID = prName.split(" ")[1];
                 speciesNameLink.setAttribute("href", "https://www.uniprot.org/uniprot/" + prID);
-                species_by_word = prName.split("=")[1].split(" ");
-                species = species_by_word[0][0] + ". " + species_by_word[1];
             }
 
             speciesNameLink.setAttribute('target', '_blank');
