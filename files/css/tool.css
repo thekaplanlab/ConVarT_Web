@@ -47,6 +47,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
   top: -30px;
   height: 70px;
   color: #fff;
+  background: #ccc;
   font-family: 'Tajawal', sans-serif !important;
   font-size: 15px;
   justify-content: center; /*text-align */
