@@ -9,10 +9,11 @@
     $worm_convart_id = $_REQUEST["worm"];
     
     $convart_id_list = array($human_convart_id, $mouse_convart_id, $worm_convart_id);
+    $convart_id_list = array_filter($convart_id_list);
 
     sort($convart_id_list);
 
-    if ($human_convart_id == "" || $mouse_convart_id == "" || $worm_convart_id =="")
+    if ($human_convart_id == "" && $mouse_convart_id == "" && $worm_convart_id =="")
       exit;
 
     $str_convart_ids = implode(",",$convart_id_list);

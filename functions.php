@@ -25,14 +25,16 @@ function arrayFind($needle, $haystack)
       }
    }
 }
-
 $availableSpecies = ["human", "chimp", "macaque", "rat", "mouse", "zebrafish", "frog", "fruitfly", "worm", "yeast"];
+
 function getHumanHomolog($geneId){
+
     if($geneId == null){
         return false;
     }
     global $db_connection;
-    global $availableSpecies; 
+    $availableSpecies = ["human", "chimp", "macaque", "rat", "mouse", "zebrafish", "frog", "fruitfly", "worm", "yeast"];
+    
     $geneId = str_replace('"', '', $geneId);
    
     for($i = 0; $i < count($availableSpecies); $i++){
@@ -41,7 +43,10 @@ function getHumanHomolog($geneId){
 
 
     $geneInfoHuman = mysqli_query($db_connection, 
-                        "SELECT * FROM homology WHERE ".implode(' or ', $availableSpecies));
+                        "SELECT homology.*, symb.meta_value as human_gene_symbol FROM homology 
+                        JOIN ncbi_gene_meta symb ON symb.ncbi_gene_id = homology.human_gene_id 
+                        and symb.meta_key = 'gene_symbol' 
+                        WHERE ".implode(' or ', $availableSpecies));
 
     if(mysqli_num_rows($geneInfoHuman) == 0){
         return null;
@@ -51,7 +56,11 @@ function getHumanHomolog($geneId){
 
     $speciesName = str_replace('_gene_id', '', arrayFind($geneId, $homology));        
     
-    return ['human_gene_id' => $homology['human_gene_id'], 'species_name' => $speciesName, 'gene_id'=> $geneId];
+    return ['human_gene_id' => $homology['human_gene_id'], 
+            'species_name' => $speciesName, 
+            'gene_id'=> $geneId,
+            'human_gene_symbol' => $homology['human_gene_symbol']
+        ];
 
 }
 function processMSA($row){
@@ -549,50 +558,53 @@ function search_spemud_proteins($spemud_value) {
     if (empty($spemud_value))
         return null;
 
-    $query_ids = mysqli_query($db_connection, "SELECT nc2.ncbi_gene_id AS human_gene_id, homology.mouse_gene_id, homology.worm_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN homology ON nc2.ncbi_gene_id = homology.human_gene_id  WHERE nc1.meta_value='Homo sapiens' AND nc2.meta_value='$spemud_value' LIMIT 1");
-    if(mysqli_num_rows($query_ids) == 0){
+    $queryIds = mysqli_query($db_connection, "SELECT nc2.ncbi_gene_id AS human_gene_id, homology.mouse_gene_id, homology.worm_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN homology ON nc2.ncbi_gene_id = homology.human_gene_id  WHERE nc1.meta_value='Homo sapiens' AND nc2.meta_value='$spemud_value' LIMIT 1");
+    if(mysqli_num_rows($queryIds) == 0){
         return null;
     }
     
-    $spemud_gene_id_array = [
+    $spemudGeneIdList = [
         "human" => "",
         "mouse" => "",
         "worm" => "",
     ];
 
-    $row = mysqli_fetch_assoc($query_ids);
-    $spemud_gene_id_array["human"] = $row["human_gene_id"];
-    $spemud_gene_id_array["mouse"] = $row["mouse_gene_id"];
-    $spemud_gene_id_array["worm"] = $row["worm_gene_id"];
+    $row = mysqli_fetch_assoc($queryIds);
+    $spemudGeneIdList["human"] = $row["human_gene_id"];
+    $spemudGeneIdList["mouse"] = $row["mouse_gene_id"];
+    $spemudGeneIdList["worm"] = $row["worm_gene_id"];
     
-    $block_result = "";
-    foreach ($spemud_gene_id_array as $key => $value) {
-        $gene_id_array = explode(",", $value);
+    $blockResults = "";
+    foreach ($spemudGeneIdList as $key => $value) {
+        $geneIdList = explode(",", $value);
         
         $species = ucwords($key);
-        $block_result .= "<div class='row pageTitle'>Results for $species <hr></div>";
-        for ($i=0; $i < count($gene_id_array) ; $i++) { 
-            $temp_gene_id = $gene_id_array[$i];
-            $query_protein_ids = mysqli_query($db_connection, "SELECT nc1.ncbi_gene_id, nc2.meta_value AS gene_symbol, GROUP_CONCAT(nc1.meta_value) AS prot_ids, cdb.convart_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN convart_gene_to_db AS cdb ON nc1.meta_value=cdb.db_id WHERE nc1.ncbi_gene_id='$temp_gene_id' AND nc1.meta_key='protein_number' AND nc2.meta_key='gene_symbol' GROUP BY cdb.convart_gene_id");
+        $blockResults .= "<div class='row pageTitle'>Results for $species <hr></div>";
+        $totalResultCount = 0;
+
+        for ($i=0; $i < count($geneIdList  ) ; $i++) { 
+            $tempGeneIds = $geneIdList [$i];
+            $queryProteinIds = mysqli_query($db_connection, "SELECT nc1.ncbi_gene_id, nc2.meta_value AS gene_symbol, GROUP_CONCAT(nc1.meta_value) AS prot_ids, cdb.convart_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN convart_gene_to_db AS cdb ON nc1.meta_value=cdb.db_id WHERE nc1.ncbi_gene_id='$tempGeneIds' AND nc1.meta_key='protein_number' AND nc2.meta_key='gene_symbol' GROUP BY cdb.convart_gene_id");
             
-            if(mysqli_num_rows($query_protein_ids) == 0){
-                
-                return null;
-            }
+            $totalResultCount += mysqli_num_rows($queryProteinIds);
             
             // Get transcripts for each gene in each organism
-            while($row_prots = mysqli_fetch_assoc($query_protein_ids)){
+            while($row_prots = mysqli_fetch_assoc($queryProteinIds)){
                 $temp_gene_symbol = $row_prots['gene_symbol'];
                 $temp_prot_ids = $row_prots['prot_ids'];
                 $temp_convart_ids = $row_prots['convart_gene_id'];
-                $spemud_radio_button = "<div class='convart-radio'><input id='$key-$temp_convart_ids' name='$key' value='$temp_convart_ids' type='radio' /> <label for='$key-$temp_convart_ids'>GeneID: $temp_gene_id | $temp_gene_symbol | $temp_prot_ids</label></div>";
+                $spemud_radio_button = "<div class='convart-radio'><input id='$key-$temp_convart_ids' name='$key' value='$temp_convart_ids' type='radio' /> <label for='$key-$temp_convart_ids'>GeneID: $tempGeneIds | $temp_gene_symbol | $temp_prot_ids</label></div>";
 
-                $block_result .= $spemud_radio_button;
+                $blockResults .= $spemud_radio_button;
             }
+        }
+
+        if($totalResultCount == 0){
+            $blockResults .= 'No homolog transcript found for this species.';
         }
     }
     
-    return $block_result;
+    return $blockResults;
 }
 
 

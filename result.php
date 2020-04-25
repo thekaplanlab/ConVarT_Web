@@ -508,12 +508,12 @@
 
         var iframeWindow = iframe.contentWindow;
         var iframeDocument = iframe.contentDocument;
-        var viewportPosition = iframeWindow.getAminoacidPositionInViewport(0, position-1);
+        var viewportPosition = iframeWindow.viewer.getAminoacidPositionInViewport(0, position-1);
         //$(iframeDocument).find('#CurrentProjectTool').scrollLeft(viewportPosition*20 - iframe.clientWidth/2);
         $(iframeDocument).find('input[name=position]').val(position);
-        iframeWindow.positionKeyUp();
+        iframeWindow.viewer.positionKeyUp();
         setTimeout(function(){
-            iframeWindow.ClinVarInfo(0, position-1);
+            iframeWindow.viewer.showVariation(0, position-1);
         }, 125);
     }
 </script>

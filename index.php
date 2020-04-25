@@ -12,7 +12,7 @@
     <link rel="icon" href="files/img/convart_black.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="files/css/style.css" media="screen"/>
-    <link type="text/css" rel="stylesheet" href="files/css/CurrentProject.css?id=v3"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="files/css/CurrentProject.css?id=<?= rand(); ?>"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
@@ -92,6 +92,9 @@
                 <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="spemudForm" autocomplete="off">
                         <div class="col s1 m1 l4"></div>
                         <div class="col s9 m9 l4">
+                            <a href="#findHumanHomolog" class="modal-trigger tooltipped btn waves-effect waves-light waves-white seqSearchButton" style="width: 100% !important;" data-position="right" 
+                            data-tooltip="Find human ortolog of the gene of your interest"><i class="material-icons">list</i> Find the human homologs of a gene </a> 
+                            <h4 style="text-align:center">OR</h4>
                             <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name or protein ID" required>
                             <p class="center-align">Example: <i>HARS</i>, NP_000010</p>
                     </div>
@@ -160,6 +163,18 @@
         
      
     </div> <!-- ConVarT -->
+
+    <!-- Human Homolog Modal -->
+    <div id="findHumanHomolog" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Find human homolog of your gene</h4>
+      <iframe src="spemud_helper_flow.php" id="spemud-helper-flow" frameborder="0" width="100%" height="500"></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue white-text">Close</a>
+    </div>
+    </div>
+
 
      <!-- Modal Structure -->
     <div id="identifier_types_help" class="modal modal-fixed-footer">

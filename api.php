@@ -7,7 +7,37 @@
 
 require_once 'libs/ssp.class.php';
 
-if(!isset($_GET['action']) || !isset($_GET['id'])){
+ob_start();
+
+require_once('db_connection.php');
+require_once('functions.php');
+$value = ob_get_contents();
+ob_end_clean();
+
+if(isset($_GET['action']) && $_GET['action'] == 'humansearch'){
+
+    $searchResults = searchProteinNumbers($_GET['query']);
+    unset($searchResults['Homo sapiens']);
+    
+    $output = [];
+    
+    foreach($searchResults as $species => $transcripts) {
+        $output[$species] = [];
+
+        foreach($transcripts as $transcript){
+        
+            $homologs = getHumanHomolog($transcript['ncbi_gene_id']);
+            if($homologs == null)
+                continue;
+            $transcript['human_homolog'] = $homologs;
+            $output[$species][] = $transcript;
+        }
+
+    }
+
+    echo json_encode($output);
+    exit;
+} else if(!isset($_GET['action']) || !isset($_GET['id'])){
     echo json_encode(['data'=>[]]);
     exit;
 }
@@ -20,13 +50,6 @@ if(!empty($invalidCharacters)){
 }
 
 $id = $_GET['id'];
-
-ob_start();
-
-require_once('db_connection.php');
-require_once('functions.php');
-$value = ob_get_contents();
-ob_end_clean();
 
 
 function utf8ize( $mixed ) {
@@ -142,7 +165,11 @@ switch ($_GET['action']) {
     case 'mouseVariants':
         $mouseQuery = getMouseVariantsData($id);
         $data = [];
+        
+        if($mouseQuery == null)
+            break;    
 
+        
         while($row = mysqli_fetch_assoc($mouseQuery)){
             $data[] = [
                 $row['ensembl_gene_id'],

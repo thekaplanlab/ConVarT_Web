@@ -132,40 +132,33 @@ $(document).ready(function() {
 	$('.modal').modal();
     $("#startAnalyse").addClass("disabled");
     $("form :input").change(function() {
-        var number_of_human = document.getElementsByName("human")
-        var number_of_mouse = document.getElementsByName("mouse")
-        var number_of_worm = document.getElementsByName("worm")
-        var total_point = 0; //must be 3 for the analysis
 
-        for (let index = 0; index < number_of_human.length; index++) {
-            const temp_id = number_of_human[index].getAttribute("id");
-            if(document.getElementById(temp_id).checked) {
-                total_point += 1
-            } 
+        speciesList = ['human', 'mouse', 'worm'];
+        selectedSpeciesCount = 0; //must be 3 for the analysis
+        availableSpeciesCount = 0;
+
+        for(species of speciesList) {
+            
+            if($('input[name='+species+']:checked').val() != undefined) {
+                selectedSpeciesCount++;
+            }
+
+            if($('input[name='+species+']').length > 0){
+                availableSpeciesCount++;
+            }
+
+        }
+        console.log(selectedSpeciesCount, availableSpeciesCount);
+        if(selectedSpeciesCount == availableSpeciesCount) {
+            $("#startAnalyse").removeClass("disabled");    
         }
 
-        for (let index = 0; index < number_of_mouse.length; index++) {
-            const temp_id = number_of_mouse[index].getAttribute("id");
-            if(document.getElementById(temp_id).checked) {
-                total_point += 1
-            } 
-        }
-
-        for (let index = 0; index < number_of_worm.length; index++) {
-            const temp_id = number_of_worm[index].getAttribute("id");
-            if(document.getElementById(temp_id).checked) {
-                total_point += 1
-            } 
-        }
-        if(total_point!=3) {
-            $("#startAnalyse").addClass("disabled");
-        }
-        else {
-            $("#startAnalyse").removeClass("disabled");
-        }
     });
+    
 });
-
+setTimeout(function() {
+    $("form :input").trigger('change');
+}, 100);
 </script>
 
 
