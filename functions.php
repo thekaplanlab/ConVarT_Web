@@ -564,28 +564,34 @@ function search_spemud_proteins($spemud_value) {
     $spemud_gene_id_array["human"] = $row["human_gene_id"];
     $spemud_gene_id_array["mouse"] = $row["mouse_gene_id"];
     $spemud_gene_id_array["worm"] = $row["worm_gene_id"];
-
+    
     $block_result = "";
     foreach ($spemud_gene_id_array as $key => $value) {
         $gene_id_array = explode(",", $value);
+        
         $species = ucwords($key);
         $block_result .= "<div class='row pageTitle'>Results for $species <hr></div>";
         for ($i=0; $i < count($gene_id_array) ; $i++) { 
             $temp_gene_id = $gene_id_array[$i];
-            $query_protein_ids = mysqli_query($db_connection, "SELECT nc1.ncbi_gene_id, nc2.meta_value AS gene_symbol, GROUP_CONCAT(nc1.meta_value) AS prot_ids, cdb.convart_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN convart_gene_to_db AS cdb ON nc1.meta_value=cdb.db_id WHERE nc1.ncbi_gene_id=$temp_gene_id AND nc1.meta_key='protein_number' AND nc2.meta_key='gene_symbol' GROUP BY cdb.convart_gene_id");
+            $query_protein_ids = mysqli_query($db_connection, "SELECT nc1.ncbi_gene_id, nc2.meta_value AS gene_symbol, GROUP_CONCAT(nc1.meta_value) AS prot_ids, cdb.convart_gene_id FROM ncbi_gene_meta AS nc1 INNER JOIN ncbi_gene_meta AS nc2 ON nc1.ncbi_gene_id=nc2.ncbi_gene_id INNER JOIN convart_gene_to_db AS cdb ON nc1.meta_value=cdb.db_id WHERE nc1.ncbi_gene_id='$temp_gene_id' AND nc1.meta_key='protein_number' AND nc2.meta_key='gene_symbol' GROUP BY cdb.convart_gene_id");
+            
             if(mysqli_num_rows($query_protein_ids) == 0){
+                
                 return null;
             }
+            
             // Get transcripts for each gene in each organism
             while($row_prots = mysqli_fetch_assoc($query_protein_ids)){
                 $temp_gene_symbol = $row_prots['gene_symbol'];
                 $temp_prot_ids = $row_prots['prot_ids'];
                 $temp_convart_ids = $row_prots['convart_gene_id'];
                 $spemud_radio_button = "<div class='convart-radio'><input id='$key-$temp_convart_ids' name='$key' value='$temp_convart_ids' type='radio' /> <label for='$key-$temp_convart_ids'>GeneID: $temp_gene_id | $temp_gene_symbol | $temp_prot_ids</label></div>";
+
                 $block_result .= $spemud_radio_button;
             }
         }
     }
+    
     return $block_result;
 }
 
