@@ -89,7 +89,7 @@ function MSAViewer(id, rawSequence, geneSymbol, variations) {
         if (container.scrollWidth < (offsetX + 600)) {
             offsetX = offsetX - 340;
 
-            textBox.className = "rightArrow";
+            textBox.className += " rightArrow";
         }
         let specificPositionforCVBox = "top: " + (prNumber * 20 - 13) + "px;" + "left: " + (offsetX) + "px;  box-shadow:#555 1px 1px 5px 3px;";
         document.getElementById(ids.aminoacidInfo).childNodes[0].style.cssText = specificPositionforCVBox;

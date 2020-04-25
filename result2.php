@@ -38,6 +38,13 @@
     $dbIds = explode(',', str_replace('"', '', $geneDetailsMouse['dbs']['ENSMUST']));
     $enstIdMouse = end(array_filter($dbIds, function($x) {return strstr($x, 'ENS') !== FALSE; }));
 
+    if(!isset($geneDetailsMouse['gene_symbol']) or empty($geneDetailsMouse['gene_symbol'])){
+        getGeneDetailsByENSTIdFromAPI($geneDetailsMouse, $enstIdMouse);
+        $geneDetailsMouse['species_id'] = "Mus musculus";
+    }
+    // print_r($geneDetailsMouse);
+
+
     $transcriptIdWorm = getTranscriptIdByConvartGeneId($worm_convart_id);
     $geneDetailsWorm = getGeneDetailsById($transcriptIdWorm);
     
@@ -74,7 +81,13 @@
     #$humanGeneVariants = array_filter($humanGeneVariants, function($x) {global $msa; return $x['transcript_id'] != $msa['human_convart_gene_id']; }); 
 
     $geneId = str_replace("\"", "", $geneDetails['dbs']['NCBI']);
-    $geneIdMouse = str_replace("\"", "", $geneDetailsMouse['dbs']['NCBI']);
+    if(!isset($geneIdMouse) or empty($geneIdMouse)) {
+        $geneIdMouse = $geneDetailsMouse['ENSG'];
+    }
+    else {
+        $geneIdMouse = str_replace("\"", "", $geneDetailsMouse['dbs']['NCBI']);
+    }
+    
     $geneIdWorm = str_replace("\"", "", $geneDetailsWorm['dbs']['NCBI']);
 
 
@@ -200,7 +213,7 @@
                     <td><b>Synonyms:</b></td><td><i> <?= printify($geneDetailsMouse['gene_synonym']); ?></i></td>
                 </tr>
                 <tr>
-                    <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsMouse['other_id']); ?></td>
+                    <td><b>Other ID(s):</b></td><td><?= linkify(@$geneDetailsMouse['ENSG']); ?></td>
                 </tr>
                 <tr>
                     <td><b>Protein Accession Numbers:</b></td><td><?= linkify(@$geneDetailsMouse['protein_number']); ?></td>
@@ -550,9 +563,9 @@
         var viewportPosition = iframeWindow.viewer.getAminoacidPositionInViewport(protein, position-1);
         //$(iframeDocument).find('#CurrentProjectTool').scrollLeft(viewportPosition*20 - iframe.clientWidth/2);
         $(iframeDocument).find('input[name=position]').val(position);
-        iframe.contentWindow.document.getElementById("speciesSelect").selectedIndex = protein;
+        iframe.contentWindow.document.getElementById("CurrentProjectTool-speciesSelect").selectedIndex = protein;
         // $(iframeDocument).find("speciesSelect").selectedIndex = protein;
-        iframeWindow.positionKeyUp();
+        iframeWindow.viewer.positionKeyUp();
         setTimeout(function(){
             iframeWindow.viewer.showVariation(protein, position-1);
         }, 125);
