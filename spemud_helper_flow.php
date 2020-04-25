@@ -18,6 +18,7 @@
             
             html += `<div class="row"> <div class="pageTitle">Results in <i> ${species} </i> <hr></div>`;
             html += transcriptView(transcripts);
+            html += `</div>`;
         }
 
         return html;
@@ -53,11 +54,12 @@
     $(function () {
         $('form').on('submit', function () { 
             $.get('api.php?action=humansearch&query='+$('input[name=query]').val(), function (data) {
-                if(data == null) {
+                data = JSON.parse(data);
+                if(data == null || data.length == 0) {
                     content = errorView();
                     
                 } else {
-                    content = speciesView(JSON.parse(data));
+                    content = speciesView(data);
                 }
 
                 $('#transcripts').html(content);
