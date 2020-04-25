@@ -25,8 +25,15 @@
     }
     function transcriptView(transcripts) {
         htmlTranscripts = ""
+        usedHumanGeneSymbols = {};
+
         for(transcript of transcripts){
-            console.log(transcript);
+            humanGeneSymbol = transcript['human_homolog']['human_gene_symbol']
+            if( humanGeneSymbol in usedHumanGeneSymbols)
+                continue
+            else
+                usedHumanGeneSymbols[humanGeneSymbol] = true;
+
             htmlTranscript = `<a target="_blank" 
                     href="http://convart.org/current_project/search?spemud=${transcript['human_homolog']['human_gene_symbol']}" 
                     class="btn waves-effect waves-light preResultBtn">
