@@ -76,61 +76,77 @@
             <div class="col s12 l12 m12"><img src="./files/img/convart.png" alt="Current Project" class="homePageLogo center"></div>
         </div>
         <div class="row">
-            <div class="col s12">
+
               <ul class="tabs searching-tabs">
-                <li class="tab searching-tab col s12 m12 l3"></li>
-                <li class="tab searching-tab col s12 m12 l2"><a class="active" href="#spemud-search"><b>S</b>pe<b>M</b>u<b>D</b></a></li>
-                <li class="tab searching-tab col s12 m12 l2"><a href="#gene-search">Gene Search</a></li>
-                <li class="tab searching-tab col s12 m12 l2"><a href="#disease-search">Disease Search</a></li>
-                <li class="tab searching-tab col s12 m12 l3"></li>
+                <li class="tab searching-tab col s0 m0 l2"></li>
+                <li class="tab searching-tab col s4 m4 l2"><a class="active" href="#spemud-search"><b>S</b>pe<b>M</b>u<b>D</b></a></li>
+                <li class="tab searching-tab col s4 m4 l3"><a href="#gene-search">Gene Search</a></li>
+                <li class="tab searching-tab col s4 m4 l3"><a href="#disease-search">Disease Search</a></li>
+                <li class="tab searching-tab col s4 m4 l2"></li>
               </ul>
-            </div>
+
+        </div>
 
             <!-- Spemud search -->
             <div id="spemud-search" class="col s12">
             <!-- <br><p class="center-align"><b>Select your proteins and visualize them with variants:</b></p> -->
                 <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="spemudForm" autocomplete="off">
-                        <div class="col s1 m1 l4"></div>
-                        <div class="col s9 m9 l4">
+                <div class="row"><br>
+
+                        <div class="col s12 m12 l3"></div>
+                        <div class="col s12 m12 l6">
                             <a href="#findHumanHomolog" class="modal-trigger tooltipped btn waves-effect waves-light waves-white seqSearchButton" style="width: 100% !important;" data-position="right" 
                             data-tooltip="Find human ortolog of the gene of your interest"><i class="material-icons">list</i> Find the human homologs of a gene </a> 
-                            <h4 style="text-align:center">OR</h4>
-                            <input name="spemud" id="spemud" type="text" class="searchbox" placeholder="Type a human gene name or protein ID" required>
+                            <h4 style="text-align:center; margin-top:0.8em; margin-bottom:0.5em; padding: 0">OR</h4>
+                            <input name="spemud" id="spemud"  type="text" class="searchbox" placeholder="Type a human gene name or protein ID" required>
                             <p class="center-align">Example: <i>HARS</i>, NP_000010</p>
+
+                        </div>
+                        <div class="col s12 m12 l4"></div>
                     </div>
-                    <div class="col s1 m1 l4"></div>
-                    <div class="col s1 m1 l12"><center><br>
+                    <div class="row"><br>
+
+                    
+                    <div class="col s12 m12 l12"><center>
                         <button class="btn waves-effect waves-light waves-white sb seqSearchButton" type="submit"><i class="material-icons">search</i>ANALYSE</button>
                     </center></div>
+                    </div>
                 </form>
-
             </div>
+          
 
             <!-- gene search -->
             <div id="gene-search" class="col s12">
               <form action="<?= $GLOBALS['base_url']; ?>search" method="get" class="mainForm" autocomplete="off">
-                <div class="col s1 m1 l3"></div>
-                <div class="col s9 m9 l5">
-                    <input name="searchText" id="searchTerm" type="text" class="searchbox" placeholder="Search a gene, GeneID, Ensembl ID or protein number" required>
-                    <p class="center-align">
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_006504.2">HGNC:10537</a> , 
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_002100">rs191391414</a> ,  <!--  -->
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001004252">Farslb</a>, 
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_032240">MGI:108087</a>, 
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001007769">ZDB-GENE-021206-2</a>, 
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_524366">FBgn0026634</a>,
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001005694.1">XB-GENE-1000989</a>, 
-                        <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_499796.2">WBGene00003373</a>
-                        <a href="#identifier_types_help" class="modal-trigger tooltipped" data-position="right" data-delay="10" data-tooltip="Explore the catalog of the gene identifiers you can search"><i class="material-icons white-text text-darken-1">help</i></a>
+                <div class="row">
+                    <div class="col s1 m1 l3"></div>
+                    <div class="col s9 m9 l5">
+                        <input name="searchText" id="searchTerm" type="text" class="searchbox" placeholder="Search a gene, GeneID, Ensembl ID or protein number" required>
+                    </div>
+                    <div class="col s1 m1 l1"><button style="float:right;" class="btn waves-effect waves-light waves-white sb" type="submit"><i class="material-icons">search</i></button></div>
+                    <div class="col s1 m1 l2"></div>
                 </div>
-                <div class="col s1 m1 l1"><button class="btn waves-effect waves-light waves-white sb" type="submit"><i class="material-icons">search</i></button></div>
-                <div class="col s1 m1 l3"></div>
+                <div class="row">
+                <div class="col s0 m0 l3"> </div>
+                <div class="col s12 m12 l6 center-align">
+                <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_006504.2">HGNC:10537</a> , 
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_002100">rs191391414</a> ,  <!--  -->
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001004252">Farslb</a>, 
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_032240">MGI:108087</a>, 
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001007769">ZDB-GENE-021206-2</a>, 
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_524366">FBgn0026634</a>,
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_001005694.1">XB-GENE-1000989</a>, 
+                            <a class="home_link" href="<?= $GLOBALS['base_url']; ?>msa?id=NP_499796.2">WBGene00003373</a>
+                            <a href="#identifier_types_help" class="modal-trigger tooltipped" data-position="right" data-delay="10" data-tooltip="Explore the catalog of the gene identifiers you can search"><i class="material-icons white-text text-darken-1">help</i></a>
+                </p>
+                </div>
+                <div class="col s0 m0 l3"> </div>
+                </div>
                 </form>
                 
-                <br><br><br><br><br><br>
-                
+               
                 <!-- Sequence Search in gene search -->
-                <p class="center-align"><b>OR</b></p><br>
+                <h4 class="center-align" style="text-align:center; margin-top:0.8em; margin-bottom:0.5em; padding: 0">OR</h4>
                 <div class="row">
                     <form action="<?= $GLOBALS['base_url']; ?>blast_query.php" method="post" name="seqSearch" autocomplete="off">
                         <div class="col l12 m12 s12"><center>
@@ -149,6 +165,8 @@
             
             <!-- disease search -->
             <div id="disease-search" class="col s12">
+            <div class="row">
+
                 <form action="<?= $GLOBALS['base_url']; ?>disease" method="get" class="mainForm" autocomplete="off">
                 <div class="col s1 m1 l3"></div>
                 <div class="col s9 m9 l5">
@@ -159,6 +177,7 @@
                 <div class="col s1 m1 l3"></div>
                 </form>
             </div>
+            </div>
         </div>
         
      
@@ -166,12 +185,14 @@
 
     <!-- Human Homolog Modal -->
     <div id="findHumanHomolog" class="modal modal-fixed-footer">
-    <div class="modal-content">
-      <h4>Find human homolog of your gene</h4>
-      <iframe src="spemud_helper_flow.php" id="spemud-helper-flow" frameborder="0" width="100%" height="500"></iframe>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue white-text">Close</a>
+    <div class="row">
+        <div class="modal-content">
+        <h4>Find human homolog of your gene</h4>
+        <iframe src="spemud_helper_flow.php" id="spemud-helper-flow" frameborder="0" width="100%" height="500"></iframe>
+        </div>
+        <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat blue white-text">Close</a>
+        </div>
     </div>
     </div>
 
