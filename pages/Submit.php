@@ -59,13 +59,10 @@ if (isset($_POST['submit'])) {
 
 		try {
 			$mail->IsSMTP();
-			$mail->Host = 'smtp.gmail.com';
-			#$mail->Host = 'smtp-relay.sendinblue.com';
-			$mail->Username   = 'convartorg@gmail.com';
+			$mail->Host = '';
+			$mail->Username   = '';
 
-			#$mail->Password   = 'wepqAr-pamcy7-habxuw';
-			#$mail->Password   = 'VtTbdvFzPm60xqEI';
-			$mail->Password   = 'wasnuv-fuqxu0-Qowzat';
+			$mail->Password   = '';
 			$mail->Port = 465;
 			#$mail->Port = 587;
 			$mail->SMTPAuth = true;
