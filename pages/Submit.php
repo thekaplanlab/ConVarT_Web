@@ -75,9 +75,8 @@ if (isset($_POST['submit'])) {
 				)
 			);
 
-			$mail->setFrom('convartorg@gmail.com', 'Convart Org');
-			//$mail->addAddress('sayiciahmet@gmail.com');
-			$mail->addAddress('oktaykaplan@gmail.com');
+			$mail->setFrom('', 'Convart Org');
+			$mail->addAddress('');
 
 			// Content
 			$mail->isHTML(true);
